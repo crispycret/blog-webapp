@@ -1,26 +1,43 @@
+import axios, { AxiosInstance, CreateAxiosDefaults, RawAxiosRequestHeaders } from 'axios';
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+
+import './assets/css/App.css';
+
+import API from './helpers/API';
+import Auth  from './helpers/auth/Auth';
+import Home from './pages/Home';
+
+
+
+/*
+  Setup App Logic
+  Modularize logic at the app level so that any component and page can have access to this logic.
+  
+
+  
+*/
+
+
+
+
 
 function App() {
+
+  let api = API()
+
+  let auth = Auth(api)
+
+  const props = {
+    api,
+    auth
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Home props/>
     </div>
-  );
+);
 }
 
 export default App;
