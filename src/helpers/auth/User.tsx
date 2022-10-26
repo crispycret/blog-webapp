@@ -1,11 +1,20 @@
 
 // When sending confedential information such as passwords to the backend should they be encrypted 
 
+import { AxiosResponse } from "axios";
 import { useState } from "react";
 
 import { APIInterface } from "../API";
 
 
+export interface UserInterface {
+    active: boolean;
+    email: string;
+    isAdmin: boolean;
+    login: (_email: string, password: string) => Promise<AxiosResponse<any, any>>;
+    logout: () => Promise<void>;
+    update: () => Promise<void>;
+}
 
 
 // using an application key known by server and frontend for extra security?
@@ -28,20 +37,23 @@ export const User = (props: APIInterface) => {
 
 
     // Process of how to login, handles communication with the backend
-    const login = async (password: string) => {
+    const login = async (_email: string, password: string) => {
+
+        setEmail(_email)
 
         let data = {
-            email,
+            email: _email,
             password,
         }
 
-        let res = await props.client.post(`${path}/login`, data)
+        let res = await props.client.post(`/login`, data)
         
+        console.log(res)
 
         if (res.status != 200) {
             // Handle Server Error
             setActive(false)
-            return
+            return res
         }
 
         // Server responded as expected but does not mean the user login was successful.
@@ -50,30 +62,32 @@ export const User = (props: APIInterface) => {
             
             // Set user to active as the login was succesful
             setActive(true)
-            setPublicId(res.data.public_id)
+            setPublicId(res.data.body.public_id)
 
             // Set user defined headers here and update the api headers afterwards.
             // Do the same on every action (edit, logout)
             // this way we know what headers are attributed to the user when looking at the overall api headers.
-            props.client_config.headers.Authorization = res.data.Authorization
+            props.client_config.headers.Authorization = res.data.body.Authorization
 
             // Set local storage or session cookies for user activity to persist
             // localStorage.setItem('auth.user.public_id', res.data.public_id)
             // localStorage.setItem('auth.user.is_admin', res.data.is_admin)
-            return
+            return res
         }
         
         if (res.data.status == 400) {
             // Handle unsuccessful response
             setActive(false)
-            return
+            return res
         }
+
+        return res
     }
 
     // Process of how to logout, handles communication with the backend
     const logout = async() => {
         
-        let res = await props.client.post(`${path}/logout`)
+        let res = await props.client.post(`/logout`)
         
         if (res.status != 200) {
             // Handle Server Error

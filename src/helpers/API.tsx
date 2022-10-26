@@ -17,7 +17,7 @@ export interface APIInterface {
   }
   
   export interface APIClientConfigInterface extends CreateAxiosDefaults{
-    baseUrl: string,
+    baseURL: string,
     headers: APIClientConfigHeadersInterface
   }
   
@@ -39,7 +39,7 @@ export interface APIInterface {
   export const API =() => {
   
     let client_config: APIClientConfigInterface = {
-      baseUrl: 'http://127.0.0.1/',
+      baseURL: 'http://127.0.0.1:5000/',
       headers: {
   
       }

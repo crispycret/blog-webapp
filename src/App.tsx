@@ -4,9 +4,12 @@ import React from 'react';
 
 import './assets/css/App.css';
 
-import API from './helpers/API';
-import Auth  from './helpers/auth/Auth';
+import API, { APIInterface } from './helpers/API';
+import Auth, { AuthInterface }  from './helpers/auth/Auth';
+
+import Navbar from "./components/Navbar/Navbar";
 import Home from './pages/Home';
+import { Authentication } from './components/Login/Authentication';
 
 
 
@@ -19,13 +22,15 @@ import Home from './pages/Home';
 */
 
 
-
+export interface PropsInterface {
+  api: APIInterface,
+  auth: AuthInterface
+}
 
 
 function App() {
 
   let api = API()
-
   let auth = Auth(api)
 
   const props = {
@@ -35,7 +40,10 @@ function App() {
 
   return (
     <div className="App">
-      <Home props/>
+      <Authentication {...props}/>
+
+      <Navbar {...props}/>
+      <Home {...props}/>
     </div>
 );
 }

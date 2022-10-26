@@ -1,5 +1,10 @@
-import User from "./User";
+import User, { UserInterface } from "./User";
 
+
+
+export interface AuthInterface {
+    user: UserInterface
+}
 
 // Authentication holds a user but does it require anything else?
 // should the methods expressed in User be defined here instead?
