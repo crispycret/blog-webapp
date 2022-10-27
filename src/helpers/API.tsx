@@ -1,6 +1,9 @@
 import axios from "axios"
 import { AxiosInstance, CreateAxiosDefaults, RawAxiosRequestHeaders } from "axios"
 
+import { useCookies } from 'react-cookie'
+import { Cookie, CookieSetOptions } from 'universal-cookie';
+
 /*
 Interfaces for the API.
 
@@ -11,9 +14,14 @@ Interfaces for the API.
  * APIClientConfigHeadersInterface -> Wrapper for the object the axios headers requires -> Must extend RawAxiosRequestHeaders
 */
 export interface APIInterface {
+    cookies: {[x: string]: any},
+    setCookie: (name: string, value: any, options?: CookieSetOptions | undefined) => void,
+    removeCookie: (name: string, options?: CookieSetOptions | undefined) => void,
     client_config: APIClientConfigInterface,
     client: AxiosInstance,
-    reconnect: () => AxiosInstance
+    reconnect: () => AxiosInstance,
+    setHeader: (key: string, value: string) => void,
+    deleteHeader: (key: string) => void,
   }
   
   export interface APIClientConfigInterface extends CreateAxiosDefaults{
@@ -30,29 +38,37 @@ export interface APIInterface {
   }
   
   
-  
-  
   /*
    API to interact with the blog api server side.
   */
   
-  export const API =() => {
+  export const API = () => {
   
+    let [cookies, setCookie, removeCookie] = useCookies()
+
     let client_config: APIClientConfigInterface = {
       baseURL: 'http://127.0.0.1:5000/',
-      headers: {
-  
-      }
+      headers: {}
     }
   
     let client = axios.create(client_config)
-  
     const reconnect = () => client = axios.create(client_config)
-  
+
+    const setHeader = (key: string, value: string) => {
+        axios.defaults.headers.common[key] = value
+    }
+
+    const deleteHeader = (key: string) => {
+        delete axios.defaults.headers.common[key]
+    }
+    
     return {
-      client_config,
-      client,
-      reconnect,
+        cookies, setCookie, removeCookie,   
+        client_config,
+        client,
+        reconnect,
+        setHeader,
+        deleteHeader
     } as APIInterface
   
   }

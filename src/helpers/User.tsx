@@ -1,10 +1,12 @@
 
 // When sending confedential information such as passwords to the backend should they be encrypted 
 
-import { AxiosResponse } from "axios";
 import { useState } from "react";
+import axios, { AxiosResponse } from "axios";
 
-import { APIInterface } from "../API";
+import {useCookies} from 'react-cookie'
+
+import { APIInterface } from "./API";
 
 
 export interface UserInterface {
@@ -13,6 +15,7 @@ export interface UserInterface {
     isAdmin: boolean;
     login: (_email: string, password: string) => Promise<AxiosResponse<any, any>>;
     logout: () => Promise<void>;
+    register: (_email: string, password: string) => Promise<AxiosResponse<any, any>>;
     update: () => Promise<void>;
 }
 
@@ -33,7 +36,7 @@ export const User = (props: APIInterface) => {
 
     // state of the user provided by the server upon successful login
     let public_id = ""
-    let [publicId, setPublicId] = useState(false)
+    let [publicId, setPublicId] = useState("")
 
 
     // Process of how to login, handles communication with the backend
@@ -62,16 +65,20 @@ export const User = (props: APIInterface) => {
             
             // Set user to active as the login was succesful
             setActive(true)
-            setPublicId(res.data.body.public_id)
+            setPublicId(res.data.body.user.public_id)
+            setEmail(res.data.body.user.email)
+            setIsAdmin(res.data.body.user.is_admin)
 
-            // Set user defined headers here and update the api headers afterwards.
-            // Do the same on every action (edit, logout)
-            // this way we know what headers are attributed to the user when looking at the overall api headers.
-            props.client_config.headers.Authorization = res.data.body.Authorization
+            // Set cookies
+            let token = res.data.body.Authorization
+            props.setCookie('Authorization', token)
+            props.setCookie('user.active', true)
+            props.setCookie('user.email', res.data.body.user.email)
+            props.setCookie('user.publicId', res.data.body.user.public_id)
 
-            // Set local storage or session cookies for user activity to persist
-            // localStorage.setItem('auth.user.public_id', res.data.public_id)
-            // localStorage.setItem('auth.user.is_admin', res.data.is_admin)
+            // Add the authorization toke to every new request made.
+            props.setHeader('Authorization', token)
+
             return res
         }
         
@@ -86,25 +93,53 @@ export const User = (props: APIInterface) => {
 
     // Process of how to logout, handles communication with the backend
     const logout = async() => {
+
+        console.log("Logging Out")
+        console.log(props.client.defaults.headers)
+
         
         let res = await props.client.post(`/logout`)
         
+        console.log(res)
+
         if (res.status != 200) {
             // Handle Server Error
+            console.log("Logout Error")
         }
 
         if (res.data.status == 200) {
             // Handle successful response
 
-            delete props.client_config.headers.Authentication
+            // Clear user
+            setActive(false)
+            setEmail("")
+            setIsAdmin(false)
+            setPublicId("")
+                        
+            // Clear cookies
+            props.removeCookie('Authorization')
+            props.removeCookie('user.active')
+            props.removeCookie('user.email')
+            props.removeCookie('user.publicId')
+
+            // Remove authorization token from every new request made.
+            delete axios.defaults.headers.common['Authorization']
         }
         
         if (res.data.status == 400) {
             // Handle unsuccessful response
+            console.log("Logout Failed")
+
         }
 
         // No matter what even if the user could not be logged out, remove all headers and cookies that point to this user.
 
+    }
+
+
+    const register = async () => {
+        let res = await props.client.post('/register')
+        return res
     }
 
     // Rename to edit or modify
@@ -138,6 +173,7 @@ export const User = (props: APIInterface) => {
         isAdmin,
         login,
         logout,
+        register,
         update,
     }
 
