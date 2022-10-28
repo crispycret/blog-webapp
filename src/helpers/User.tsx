@@ -1,15 +1,15 @@
 
 // When sending confedential information such as passwords to the backend should they be encrypted 
 
-import { useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import { useState, useEffect} from "react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 import {useCookies} from 'react-cookie'
+import API from "./API";
 
-import { APIInterface } from "./API";
 
 
-export interface UserInterface {
+export type User = {
     active: boolean;
     email: string;
     isAdmin: boolean;
@@ -21,7 +21,7 @@ export interface UserInterface {
 
 
 // using an application key known by server and frontend for extra security?
-export const User = (props: APIInterface) => {
+export const User = (props: API) => {
 
     let path = '/user'
 
@@ -50,14 +50,13 @@ export const User = (props: APIInterface) => {
         }
 
         let res = await props.client.post(`/login`, data)
-        
-        console.log(res)
 
-        if (res.status != 200) {
-            // Handle Server Error
-            setActive(false)
-            return res
-        }
+        .catch((error: AxiosError) => {
+            console.log("Server Login Failed")
+            return Promise.reject(error);
+        })
+
+        console.log(res.data.body)
 
         // Server responded as expected but does not mean the user login was successful.
         if (res.data.status == 200) {
@@ -72,11 +71,12 @@ export const User = (props: APIInterface) => {
             // Set cookies
             let token = res.data.body.Authorization
             props.setCookie('Authorization', token)
-            props.setCookie('user.active', true)
-            props.setCookie('user.email', res.data.body.user.email)
-            props.setCookie('user.publicId', res.data.body.user.public_id)
+            props.setCookie('user_active', true)
+            props.setCookie('user_email', res.data.body.user.email)
+            props.setCookie('user_publicId', res.data.body.user.public_id)
+            props.setCookie('user_isAdmin', res.data.body.user.is_admin)
 
-            // Add the authorization toke to every new request made.
+            // Add the authorization token to every new request made.
             props.setHeader('Authorization', token)
 
             return res
@@ -94,45 +94,49 @@ export const User = (props: APIInterface) => {
     // Process of how to logout, handles communication with the backend
     const logout = async() => {
 
-        console.log("Logging Out")
-        console.log(props.client.defaults.headers)
-
-        
         let res = await props.client.post(`/logout`)
         
-        console.log(res)
+        .catch((error: AxiosError) => {
+            console.log("Server Logout Failed")
+            return Promise.reject(error);
+        })
+        
+        // No matter the status of the logout server side, make sure logout happens client side
+        // If the user could not be logged out successfully server side, remove all headers and cookies that point to this user.
+        // Clear user propery values
+        setActive(false)
+        setEmail("")
+        setIsAdmin(false)
+        setPublicId("")
+                    
+        // Clear cookies
+        props.removeCookie('Authorization')
+        props.removeCookie('user_active')
+        props.removeCookie('user_email')
+        props.removeCookie('user_publicId')
+        props.removeCookie('user_isAdmin')
 
+        // Remove authorization token from every new request made.
+        delete axios.defaults.headers.common['Authorization']
+
+
+        // Special action based on the server results of the logout.
         if (res.status != 200) {
             // Handle Server Error
             console.log("Logout Error")
+            return 
         }
 
         if (res.data.status == 200) {
             // Handle successful response
-
-            // Clear user
-            setActive(false)
-            setEmail("")
-            setIsAdmin(false)
-            setPublicId("")
-                        
-            // Clear cookies
-            props.removeCookie('Authorization')
-            props.removeCookie('user.active')
-            props.removeCookie('user.email')
-            props.removeCookie('user.publicId')
-
-            // Remove authorization token from every new request made.
-            delete axios.defaults.headers.common['Authorization']
+            console.log("Logout Success")
         }
         
         if (res.data.status == 400) {
             // Handle unsuccessful response
             console.log("Logout Failed")
-
         }
 
-        // No matter what even if the user could not be logged out, remove all headers and cookies that point to this user.
 
     }
 
@@ -166,6 +170,25 @@ export const User = (props: APIInterface) => {
         // No matter what even if the user could not be logged out, remove all headers and cookies that point to this user.
         
     }
+
+
+
+    // On Page Load check cookies
+    useEffect(() => {
+        // Check for authentication cookie
+        // Using Authorization and other user cookies make a request to the api to validate cookie information?
+        // Implement Authorization expiration time so
+        if (props.cookies.Authorization) {
+            setActive(true)
+            setEmail(props.cookies.user_email)
+            setPublicId(props.cookies.user_publicId)
+            setIsAdmin(props.cookies.user_isAdmin)
+            
+            // Re-add request headers that should persist for every request
+            props.setHeader('Authorization', props.cookies.Authorization)
+        }
+    }, [])
+
 
     return {
         active,

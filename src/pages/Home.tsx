@@ -1,6 +1,7 @@
+import { Props } from "../App";
 
 
-export const Home = (props: any) => {
+export const Home = (props: Props) => {
 
     return (
         <>

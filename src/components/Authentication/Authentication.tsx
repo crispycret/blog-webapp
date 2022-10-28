@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { Container, Modal, Form, Button, Tabs, Tab } from "react-bootstrap"
-import { PropsInterface } from "../../App"
+import { Props } from "../../App"
 
 
 
@@ -9,16 +9,14 @@ import { PropsInterface } from "../../App"
     Upon login or registration failure the error message will be displayed.
 
 */
-export const Authentication = (props: PropsInterface, _show=false) => {
+export const Authentication = (props: Props, _show=false) => {
 
     const loginForm = useRef<HTMLFormElement>(null)
     const registerForm = useRef<HTMLFormElement>(null)
- 
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
-
 
     const [showError, setShowError] = useState(false)
     const [errorMsg, setErrorMsg] = useState("Login Failed")
@@ -37,7 +35,6 @@ export const Authentication = (props: PropsInterface, _show=false) => {
 
         // Disable fields and ability to resubmit
         // Enable loading symbol for visual effect
-
         
         // Is this an email
         // Is this a valid password for this site
@@ -63,9 +60,8 @@ export const Authentication = (props: PropsInterface, _show=false) => {
         }
 
         else if (selectedForm == 'register') {
-            
-            // Confirm password matches password
 
+            // Confirm password matches password
             props.user.register(email, password).then ((res) => {
                 if (res.data.status == 200) {
                     // register successful
@@ -83,9 +79,9 @@ export const Authentication = (props: PropsInterface, _show=false) => {
                     setErrorMsg(res.data.msg)
                 }
             })
-            
         }
     }
+
 
     useEffect(() => {
 
@@ -94,7 +90,6 @@ export const Authentication = (props: PropsInterface, _show=false) => {
     return (
         <Container>
             <Modal show={props.showAuth} onHide={handleClose} className='my-auto'>
-
 
                 {/* User is already autheticated */}
                 {props.user.active &&
@@ -106,7 +101,7 @@ export const Authentication = (props: PropsInterface, _show=false) => {
                         <Modal.Body>You are already logged in as {props.user.email}</Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={handleClose}>Close</Button>
-                            <Button variant="primary" onClick={handleClose}>Logout</Button>
+                            <Button variant="primary" onClick={e => {props.user.logout(); handleClose();}}>Logout</Button>
                         </Modal.Footer>
                     </>
                 }
@@ -121,23 +116,13 @@ export const Authentication = (props: PropsInterface, _show=false) => {
                         defaultActiveKey="login"
                         id="auth-tabs"
                         className="mb-3 position-absolute top-0 "
-                        // style={{
-                        //     position: 'absolute',
-                        //     top:0,
-                        //     borderTop:0,
-
-                        // }}
                     >
                         {/* Display Login Tab */}
                         <Tab eventKey="login" title="Login">
-                            {showError &&
-                                <Modal.Body>
-                                    {errorComponent}
-                                </Modal.Body>
-                            }
+
+                            {showError && <Modal.Body>{errorComponent}</Modal.Body> }
 
                             <Modal.Footer>
-
                                 <Form id='login' ref={loginForm} style={{width: '100%'}} onSubmit={e => onSubmit(e)}>
                                     <Form.Group className="mb-3" controlId="formBasicEmail">
                                         <Form.Label>Email address</Form.Label>
@@ -156,7 +141,6 @@ export const Authentication = (props: PropsInterface, _show=false) => {
                                     </Form.Group>
                                     <Button variant="primary" type="submit">Login</Button>
                                 </Form>
-
                             </Modal.Footer>
                         </Tab>
 

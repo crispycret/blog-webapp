@@ -1,32 +1,35 @@
 import axios, { AxiosInstance, CreateAxiosDefaults, RawAxiosRequestHeaders } from 'axios';
 import React, { useState } from 'react';
 
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+
 
 import './assets/css/App.css';
 
-import API, { APIInterface } from './helpers/API';
-import User, {UserInterface} from './helpers/User'
+import API from './helpers/API';
+import User from './helpers/User'
 
 import MyNavbar from "./components/Navbar/MyNavbar";
 import { Authentication } from './components/Authentication/Authentication';
 
 import Home from './pages/Home';
-
-
+import Dashboard from './pages/Dashboard';
+import PostForm from './components/Post/PostForm';
 
 
 /*
   Setup App Logic
   Modularize logic at the app level so that any component and page can have access to this logic.
-  
-
-  
 */
 
-
-export interface PropsInterface {
-  api: APIInterface,
-  user: UserInterface,
+export type Props = {
+  api: API,
+  user: User,
   showAuth: boolean,
   setShowAuth: React.Dispatch<React.SetStateAction<boolean>>,
 }
@@ -47,12 +50,29 @@ function App() {
 
   return (
     <div className="App">
-      <Authentication {...props}/>
 
+      <Authentication {...props}/>
       <MyNavbar {...props}/>
-      <Home {...props}/>
+
+      <Router>
+        <Routes>
+          
+          {/* <Route path='/' element={<Layout {...props} />} />  */}
+          <Route index element={<Home {...props} />} />
+          
+          {user.active && user.isAdmin &&
+            <Route path='/post/create' element={<PostForm />} />
+          }
+          
+        </Routes>
+      </Router>
+
+      {/* <Home {...props}/> */}
     </div>
-);
+  );
 }
 
+
 export default App;
+
+

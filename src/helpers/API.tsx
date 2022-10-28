@@ -1,5 +1,6 @@
 import axios from "axios"
 import { AxiosInstance, CreateAxiosDefaults, RawAxiosRequestHeaders } from "axios"
+import { useEffect } from "react";
 
 import { useCookies } from 'react-cookie'
 import { Cookie, CookieSetOptions } from 'universal-cookie';
@@ -13,23 +14,23 @@ Interfaces for the API.
 
  * APIClientConfigHeadersInterface -> Wrapper for the object the axios headers requires -> Must extend RawAxiosRequestHeaders
 */
-export interface APIInterface {
+export type API = {
     cookies: {[x: string]: any},
     setCookie: (name: string, value: any, options?: CookieSetOptions | undefined) => void,
     removeCookie: (name: string, options?: CookieSetOptions | undefined) => void,
-    client_config: APIClientConfigInterface,
+    client_config: ClientConfig,
     client: AxiosInstance,
     reconnect: () => AxiosInstance,
     setHeader: (key: string, value: string) => void,
     deleteHeader: (key: string) => void,
   }
   
-  export interface APIClientConfigInterface extends CreateAxiosDefaults{
+  export type ClientConfig = {
     baseURL: string,
-    headers: APIClientConfigHeadersInterface
+    headers: ClientConfigHeaders
   }
   
-  export interface APIClientConfigHeadersInterface extends RawAxiosRequestHeaders {
+  export type ClientConfigHeaders = {
     // Unfourtently with how typescript works we must add all possible headers 
     // that will be accumulated now as optional
     
@@ -46,7 +47,7 @@ export interface APIInterface {
   
     let [cookies, setCookie, removeCookie] = useCookies()
 
-    let client_config: APIClientConfigInterface = {
+    let client_config: ClientConfig = {
       baseURL: 'http://127.0.0.1:5000/',
       headers: {}
     }
@@ -61,6 +62,11 @@ export interface APIInterface {
     const deleteHeader = (key: string) => {
         delete axios.defaults.headers.common[key]
     }
+
+    // On Page Load check cookies and set values
+    useEffect(() => {
+        // No cookie values need to be loaded here
+    }, [])
     
     return {
         cookies, setCookie, removeCookie,   
@@ -69,7 +75,7 @@ export interface APIInterface {
         reconnect,
         setHeader,
         deleteHeader
-    } as APIInterface
+    } as API
   
   }
 
