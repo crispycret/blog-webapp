@@ -34,9 +34,9 @@ export const Post = (props: PostProps) => {
             Or for use in the post/create view as the preview version of the post.
          */}
 
-            <Container className='bg-dark text-white text-start'>
+            <Container className='bg-dark text-start'>
 
-                <Card className='bg-dark text-white'>
+                <Card className='bg-dark'>
                     <Card.Header>
                         <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} children={`# ${props.title}`} />
                     </Card.Header>
