@@ -23,6 +23,7 @@ export type User = {
 // using an application key known by server and frontend for extra security?
 export const User = (props: API) => {
 
+
     let path = '/user'
 
     // Boolean value for if the user is logged in.
@@ -52,11 +53,9 @@ export const User = (props: API) => {
         let res = await props.client.post(`/login`, data)
 
         .catch((error: AxiosError) => {
-            console.log("Server Login Failed")
             return Promise.reject(error);
         })
 
-        console.log(res.data.body)
 
         // Server responded as expected but does not mean the user login was successful.
         if (res.data.status == 200) {
@@ -70,11 +69,11 @@ export const User = (props: API) => {
 
             // Set cookies
             let token = res.data.body.Authorization
-            props.setCookie('Authorization', token)
-            props.setCookie('user_active', true)
-            props.setCookie('user_email', res.data.body.user.email)
-            props.setCookie('user_publicId', res.data.body.user.public_id)
-            props.setCookie('user_isAdmin', res.data.body.user.is_admin)
+            props.setCookie('Authorization', token, { path: '/' })
+            props.setCookie('user_active', true, { path: '/' })
+            props.setCookie('user_email', res.data.body.user.email, { path: '/' })
+            props.setCookie('user_publicId', res.data.body.user.public_id, { path: '/' })
+            props.setCookie('user_isAdmin', res.data.body.user.is_admin, { path: '/' })
 
             // Add the authorization token to every new request made.
             props.setHeader('Authorization', token)
@@ -97,7 +96,6 @@ export const User = (props: API) => {
         let res = await props.client.post(`/logout`)
         
         .catch((error: AxiosError) => {
-            console.log("Server Logout Failed")
             return Promise.reject(error);
         })
         
@@ -123,18 +121,15 @@ export const User = (props: API) => {
         // Special action based on the server results of the logout.
         if (res.status != 200) {
             // Handle Server Error
-            console.log("Logout Error")
             return 
         }
 
         if (res.data.status == 200) {
             // Handle successful response
-            console.log("Logout Success")
         }
         
         if (res.data.status == 400) {
             // Handle unsuccessful response
-            console.log("Logout Failed")
         }
 
 

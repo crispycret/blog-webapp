@@ -20,6 +20,7 @@ import { Authentication } from './components/Authentication/Authentication';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import PostForm from './components/Post/PostForm';
+import { CreatePost } from './components/Post/CreatePost';
 
 
 /*
@@ -60,9 +61,11 @@ function App() {
           {/* <Route path='/' element={<Layout {...props} />} />  */}
           <Route index element={<Home {...props} />} />
           
+          {/* Put this in the dashboard forward to /dashboard/post/create */}
           {user.active && user.isAdmin &&
-            <Route path='/post/create' element={<PostForm />} />
+            <Route path='/post/create' element={<CreatePost {...props}/>} />
           }
+  
           
         </Routes>
       </Router>
