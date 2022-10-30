@@ -11,7 +11,8 @@ import { Props } from '../../App'
 type PostProps = Props & {
     title: string,
     body: string,
-    bodyLimit?: number | undefined
+    bodyLimit?: number | undefined,
+    key?: number | undefined,
 }
 
 export const Post = (props: PostProps) => {
@@ -34,7 +35,7 @@ export const Post = (props: PostProps) => {
             Or for use in the post/create view as the preview version of the post.
          */}
 
-            <Container className='bg-dark text-white text-start'>
+            <Container key={`post-${props.key}`} className='bg-dark text-start text-white'>
 
                 <Card className='bg-dark text-white'>
                     <Card.Header>
@@ -47,7 +48,10 @@ export const Post = (props: PostProps) => {
                     </ListGroup> */}
 
                     <Card.Body>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} children={props.body.substring(0, bodyLimit)} />
+                        <ReactMarkdown 
+                            remarkPlugins={[remarkGfm]} 
+                            rehypePlugins={[rehypeHighlight]} 
+                            children={props.body.substring(0, bodyLimit)} />
                     </Card.Body>
 
                     {/* Show More body Footer Overlay*/}

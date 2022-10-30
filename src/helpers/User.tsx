@@ -69,11 +69,11 @@ export const User = (props: API) => {
 
             // Set cookies
             let token = res.data.body.Authorization
-            props.setCookie('Authorization', token, { path: '/' })
-            props.setCookie('user_active', true, { path: '/' })
-            props.setCookie('user_email', res.data.body.user.email, { path: '/' })
-            props.setCookie('user_publicId', res.data.body.user.public_id, { path: '/' })
-            props.setCookie('user_isAdmin', res.data.body.user.is_admin, { path: '/' })
+            props.setCookie('Authorization', token, { path: '/', secure: true, sameSite: true})
+            props.setCookie('user_active', true, { path: '/', sameSite: true })
+            props.setCookie('user_email', res.data.body.user.email, { path: '/', sameSite: true })
+            props.setCookie('user_publicId', res.data.body.user.public_id, { path: '/', sameSite: true })
+            props.setCookie('user_isAdmin', res.data.body.user.is_admin, { path: '/', sameSite: true })
 
             // Add the authorization token to every new request made.
             props.setHeader('Authorization', token)
@@ -84,6 +84,7 @@ export const User = (props: API) => {
         if (res.data.status == 400) {
             // Handle unsuccessful response
             setActive(false)
+            console.log(res)
             return res
         }
 
