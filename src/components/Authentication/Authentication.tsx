@@ -53,6 +53,9 @@ export const Authentication = (props: Props, _show=false) => {
                 if (res.data.status == 400) {
                     // Login unsuccessful
                     // display red error bar at top of form fields
+  
+                    console.log(res.data)
+  
                     setShowError(true)
                     setErrorMsg(res.data.msg)
                 }
