@@ -50,6 +50,7 @@ export type API = {
     let client_config: ClientConfig = {
       baseURL: 'https://bnadeau-blog-api.herokuapp.com/',
       // baseURL: 'http://localhost:5000/',
+      
       headers: {}
     }
   
