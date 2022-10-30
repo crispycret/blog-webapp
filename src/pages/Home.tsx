@@ -11,18 +11,13 @@ export const Home = (props: Props) => {
 
     return (
         <>
+            <Container className='bg-dark text-white'>
+                <div className='mb-3'></div>
 
-            <div className='mb-3'></div>
+                <PostList {...props} />
 
-            <PostList {...props} />
-
-            {!props.user.active &&
-                <>
-                    {
-
-                    }
-                </>
-            }
+                { !props.user.active && <>{}</> }
+            </Container>
 
         </>
     )

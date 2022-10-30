@@ -21,10 +21,10 @@ export const MyNavbar = (props: Props) => {
               {/* Constant Navigation */}
               <Nav>
               <Nav.Link onClick={e => window.location.href='https://www.bnadeau.dev/'}>Portfolio</Nav.Link>
-              <Nav.Link onClick={e => window.location.href='https://www.bnadeau.dev/#projects'}>Projects</Nav.Link>
-              <Nav.Link href="#about">About</Nav.Link>
-              <Nav.Link href="#resume">Resume</Nav.Link>
-              <Nav.Link href="/">Blog</Nav.Link>  
+              {/* <Nav.Link onClick={e => window.location.href='https://www.bnadeau.dev/#projects'}>Projects</Nav.Link> */}
+              {/* <Nav.Link href="#about">About</Nav.Link> */}
+              {/* <Nav.Link href="#resume">Resume</Nav.Link> */}
+              {/* <Nav.Link href="/">Blog</Nav.Link>   */}
             </Nav>
 
             <Nav className='ms-auto'>
