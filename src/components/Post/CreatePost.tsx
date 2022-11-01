@@ -23,8 +23,6 @@ export const CreatePost = (props: Props) => {
     const [showError, setShowError] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
 
-    
-
 
     const handleSubmit = async () => {
         let data = {
@@ -61,20 +59,22 @@ export const CreatePost = (props: Props) => {
     }, [])
 
     return (
-        <Container className='bg-dark flex-grow vh-100'>
-            <h1>Create New Post</h1>
-            <Tabs
-                defaultActiveKey="edit"
-                id="createbo-post-tabs"
-                className="mb-3 border-0"
-            >
-                <Tab eventKey="edit" title="Edit">
-                    <PostForm {...props} {...postProps} {...postFormProps} />
-                </Tab>
-                <Tab eventKey="view" title="View">
-                    <Post {...props} {...postProps} />
-                </Tab>
-            </Tabs>
+        <Container fluid className='bg-dark text-white'>
+            <Container>
+                <h1>Create New Post</h1>
+                <Tabs
+                    defaultActiveKey="edit"
+                    id="createbo-post-tabs"
+                    className="mb-3 border-0"
+                >
+                    <Tab eventKey="edit" title="Edit">
+                        <PostForm {...props} {...postProps} {...postFormProps} />
+                    </Tab>
+                    <Tab eventKey="view" title="View">
+                        <Post {...props} {...postProps} />
+                    </Tab>
+                </Tabs>
+            </Container>
         </Container>
     )
 

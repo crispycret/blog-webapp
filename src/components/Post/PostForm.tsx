@@ -59,7 +59,7 @@ export const PostForm = (props: PostForm) => {
 
 
     return <>
-        <Container className='mx-auto bg-dark text-white text-start'>
+        <Container fluid className='mx-auto bg-dark text-white text-start'>
 
 
             <Form className='mt-3 mx-auto' onSubmit={e => handleSubmit(e)}>

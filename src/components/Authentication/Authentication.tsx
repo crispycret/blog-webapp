@@ -202,3 +202,6 @@ export const Authentication = (props: Props, _show=false) => {
 
 }
 
+
+export default Authentication
+

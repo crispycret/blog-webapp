@@ -5,22 +5,22 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link
+  Navigate
 } from "react-router-dom";
 
+import { Container } from 'react-bootstrap';
 
 import './assets/css/App.css';
 
 import API from './helpers/API';
 import User from './helpers/User'
 
+import Authentication from './components/Authentication/Authentication';
 import MyNavbar from "./components/Navbar/MyNavbar";
-import { Authentication } from './components/Authentication/Authentication';
 
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
-import PostForm from './components/Post/PostForm';
-import { CreatePost } from './components/Post/CreatePost';
+
 import Posts from './helpers/Posts';
 import PostPage from './pages/PostPage';
 
@@ -59,7 +59,8 @@ function App() {
 
 
   return (
-    <div className="App bg-dark text-light">
+    <Container fluid className="App bg-dark text-light px-0 mx-0 " style={{minHeight:'100vh'}}>
+
 
       <Authentication {...props}/>
       <MyNavbar {...props}/>
@@ -69,19 +70,32 @@ function App() {
           
           {/* <Route path='/' element={<Layout {...props} />} />  */}
           <Route index element={<HomePage {...props} />} />
+          <Route path='/' element={<HomePage {...props} />} />
 
           <Route path='/post/:postId' element={<PostPage {...props} />} />
           
+
           {/* Put this in the dashboard forward to /dashboard/post/create */}
+          {/* <Route path='/dashboard/*' element={ */}
+              {/* props.user.isAdmin ?  */}
+              {/* <DashboardPage {...props}/> : <Navigate to="/" replace /> */}
+          {/* } /> */}
+
           {props.user.active && props.user.isAdmin &&
-            <Route path='/dashboard/*' element={<DashboardPage {...props}/>} />
-          } 
+            <Route path='/dashboard/*' element={
+                <DashboardPage {...props}/> 
+            } />
+          }
+
+          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
   
           
         </Routes>
+
+        <Container className='bg-dark py-5'></Container>
       </Router>
 
-    </div>
+    </Container>
   );
 }
 

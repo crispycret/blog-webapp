@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Navigate, Route, Routes } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
 import { Container, Row, Col, Card, ListGroup, ListGroupItem } from 'react-bootstrap'
 import { Props } from "../App";
 
@@ -19,7 +21,7 @@ export const DashboardPage = (props: RouteProps) => {
 
     useEffect (() => {
         if (!props.user.isAdmin) {
-            window.location.href = '/'
+            // window.location.href = '/'
         }
 
         if(props.user.isAdmin) {
@@ -33,27 +35,34 @@ export const DashboardPage = (props: RouteProps) => {
   
         <h1>Dashboard</h1>
 
-        <Container>
+        <>
             <PostManager {...props} />
-        </Container>
+        </>
 
     </>
 
 
     return (
-        <>
+        <Container fluid className="bg-dark text-white">
             {/* Put this in the dashboard forward to /dashboard/post/create */}
 
             <Routes>
+
+                {!props.user.active && !props.user.isAdmin &&
+                    <Navigate to='/' replace/>
+                }
+                
                 <Route index path='/' element={element} />
                 
                 {/* CreatePost and EditPost should be the same component */}
                 {/* <Route path='/post/create' element={<CreatePost {...props}/>} /> */}
                 <Route path='/post/create' element={<CreatePost {...props}/>} />
                 <Route path='/post/:postId/edit' element={<EditPost {...props} />} />
+
+                {/* <Route path="*" element={<Navigate to="/dashboard" replace />} /> */}
             </Routes>
   
-        </>
+        </Container>
     )
 }
 

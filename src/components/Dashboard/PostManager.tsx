@@ -51,34 +51,45 @@ export const PostManager = (props: Props) => {
             {deletePopupElement}
 
             <Container>
-
-                <ListGroup horizontal className='ms-auto'>
+                <ListGroup horizontal>
                     <Link to={paths.createPost} style={{textDecoration: 'none'}}>
-                        <ListGroupItem  className='border rounded'>
+                        <ListGroupItem  className='border rounded-top'>
                             <BiAddToQueue /> New
                         </ListGroupItem>
                     </Link>
                 </ListGroup>
 
-                <ListGroup>
-                { props.posts.posts.map((post: any) =>
-                    <ListGroupItem key={post.id}>
-                        <Row className='text-start'>
-                            <Col className='col-11'>
-                            <Link to={`/post/${post.id}`} className='text-dark' style={{textDecoration:'none'}}>{post.title}</Link>
-                            </Col>
+                <ListGroup className='rounded-0'>
+                    <ListGroupItem className='text-start fw-bold fs-6'>
+                        <Row>
+                            <Col className='col-11'>Title</Col>
                             <Col className='col-1'>
                                 <Row>
-                                    <Col><Link to={`/dashboard/post/${post.id}/edit`} style={{textDecoration:'none'}}><FaRegEdit /></Link></Col>
-                                    {/* <Col><Link to={`/post/${post.id}/delete`} style={{textDecoration:'none'}} className='text-danger'><AiFillDelete/></Link></Col> */}
-                                    <Col>
-                                        <AiFillDelete className='text-danger' onClick={() => {setShowDeletePopup(true); setSelectedId(post.id)}}/>
-                                    </Col>
+                                    <Col><FaRegEdit /></Col>
+                                    <Col><AiFillDelete /></Col>
                                 </Row>
                             </Col>
                         </Row>
                     </ListGroupItem>
-                )}
+                </ListGroup>
+
+                <ListGroup className='px-0 mx-0'>
+                    { props.posts.posts.map((post: any, i: number, row: any) => 
+        
+                        <ListGroupItem key={post.id} className='border rounded-0'>
+                            <Row className='text-start'>
+                                <Col className='col-11'>
+                                    <Link to={`/post/${post.id}`}  style={{textDecoration:'none'}}>{post.title}</Link>
+                                </Col>
+                                <Col className='col-1'>
+                                    <Row>
+                                        <Col><Link to={`/dashboard/post/${post.id}/edit`} style={{textDecoration:'none'}}><FaRegEdit /></Link></Col>
+                                        <Col><AiFillDelete className='text-danger' onClick={() => {setShowDeletePopup(true); setSelectedId(post.id)}}/></Col>
+                                    </Row>
+                                </Col>
+                            </Row>
+                        </ListGroupItem>
+                    )}
                 </ListGroup>
             </Container>
         </>

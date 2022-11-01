@@ -97,26 +97,27 @@ export const EditPost = (props: Props) => {
 
 
     return (
-        <Container className='bg-dark flex-grow vh-100'>
-            
-            <h1>
-                { id && 'Edit Post'}
-                { !id && 'Create New Post'}
-            </h1>
+        <Container fluid className='bg-dark text-white'>
+            <Container className='bg-dark text-white'>
+                <h1>
+                    { id && 'Edit Post'}
+                    { !id && 'Create New Post'}
+                </h1>
 
-            <Tabs
-                defaultActiveKey="edit"
-                id="createbo-post-tabs"
-                className="mb-3 border-0"
-            >
-                <Tab eventKey="edit" title="Edit">
-                    {/* feed PostForm an onSubmit method that determines if we need to Edit a post or creat a new post */}
-                    <PostForm {...props} {...postProps} {...postFormProps}/>
-                </Tab>
-                <Tab eventKey="view" title="View">
-                    <Post {...props} {...postProps} />
-                </Tab>
-            </Tabs>
+                <Tabs
+                    defaultActiveKey="edit"
+                    id="createbo-post-tabs"
+                    className="mb-3 border-0"
+                >
+                    <Tab eventKey="edit" title="Edit">
+                        {/* feed PostForm an onSubmit method that determines if we need to Edit a post or creat a new post */}
+                        <PostForm {...props} {...postProps} {...postFormProps}/>
+                    </Tab>
+                    <Tab eventKey="view" title="View">
+                        <Post {...props} {...postProps} />
+                    </Tab>
+                </Tabs>
+            </Container>
         </Container>
     )
 }

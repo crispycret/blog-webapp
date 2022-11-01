@@ -33,12 +33,12 @@ export const MyNavbar = (props: Props) => {
                 <Nav.Link href="#pages" onClick={e => props.setShowAuth(true)}>Login</Nav.Link>
               }
 
-              {/* Display Features with authentication */}
-              <NavDropdown title={props.user.email} id="basic-nav-dropdown">
-
+                {/* Display Features with authentication */}
                 {/* Basic Authentication */}
                 {props.user.active && 
-                  <>
+                
+                  <NavDropdown title={props.user.email} id="basic-nav-dropdown">
+
                       <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                       <NavDropdown.Item href="/settings">Settings</NavDropdown.Item>
                       <NavDropdown.Divider />
@@ -47,15 +47,14 @@ export const MyNavbar = (props: Props) => {
                       {props.user.active && props.user.isAdmin &&
                         <>
                           <NavDropdown.Item href='/dashboard'>Dashboard</NavDropdown.Item>
-                          <NavDropdown.Item href='/post/create'>New Post</NavDropdown.Item>
+                          <NavDropdown.Item href='/dashboard/post/create'>New Post</NavDropdown.Item>
                           <NavDropdown.Divider />
                         </>
                       }
 
                       <NavDropdown.Item href="#" onClick={props.user.logout}>Logout</NavDropdown.Item>
-                  </>
-                }
-              </NavDropdown>
+                </NavDropdown>
+              }
 
             </Nav>
           </Navbar.Collapse>
