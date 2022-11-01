@@ -6,11 +6,16 @@ import { Container, ListGroup, ListGroupItem, Row, Col, Modal, ModalHeader, Moda
 
 import { FaRegEdit } from 'react-icons/fa'
 import { AiOutlineDelete, AiFillDelete } from 'react-icons/ai'
+import { BiAddToQueue } from 'react-icons/bi'
 
 import { Props } from "../../App";
 
 
 export const PostManager = (props: Props) => {
+
+    const paths = {
+        createPost: '/dashboard/post/create' 
+    }
 
 
     const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -46,11 +51,22 @@ export const PostManager = (props: Props) => {
             {deletePopupElement}
 
             <Container>
+
+                <ListGroup horizontal className='ms-auto'>
+                    <Link to={paths.createPost} style={{textDecoration: 'none'}}>
+                        <ListGroupItem  className='border rounded'>
+                            <BiAddToQueue /> New
+                        </ListGroupItem>
+                    </Link>
+                </ListGroup>
+
                 <ListGroup>
                 { props.posts.posts.map((post: any) =>
                     <ListGroupItem key={post.id}>
                         <Row className='text-start'>
-                            <Col className='col-11'>{post.title}</Col>
+                            <Col className='col-11'>
+                            <Link to={`/post/${post.id}`} className='text-dark' style={{textDecoration:'none'}}>{post.title}</Link>
+                            </Col>
                             <Col className='col-1'>
                                 <Row>
                                     <Col><Link to={`/dashboard/post/${post.id}/edit`} style={{textDecoration:'none'}}><FaRegEdit /></Link></Col>

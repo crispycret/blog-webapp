@@ -12,6 +12,11 @@ export type PostForm = Props & {
 
     body: string,
     setBody: (arg0: string) => void,
+
+    private?: boolean,
+    setPrivate?: (arg0: boolean) => void,
+    draft?: boolean
+    setDraft?: (arg0: boolean) => void,
     
     handleSubmit: () => Promise<AxiosResponse<any, any>>,
     
@@ -20,6 +25,8 @@ export type PostForm = Props & {
     
     showError: boolean,
     setShowError: React.Dispatch<React.SetStateAction<boolean>>,
+
+
 }
 
 export const PostForm = (props: PostForm) => {
@@ -73,9 +80,9 @@ export const PostForm = (props: PostForm) => {
                 </Form.Group>
 
 
-                <Form.Group className="mb-3" controlId="postForm.Tags">
+                <Form.Group  className="mb-3" controlId="postForm.Tags">
                     <Form.Label>Tags</Form.Label>
-                    <Form.Control type="Tags" placeholder="Find Form Tag Module" />
+                    <Form.Control disabled type="Tags" placeholder="Find Form Tag Module" />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="postForm.Body">
@@ -85,12 +92,27 @@ export const PostForm = (props: PostForm) => {
                     />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="make private" />
+                <Form.Group className="py-3" controlId="postFrom.formOptions">
+                    <Form.Label>Options</Form.Label>
+                    <Form.Check type="checkbox" label="Private" 
+                        checked={props.private ? props.private : false} 
+                        onChange={ () => {
+                            // Reverse the value of private or use false
+                            // setPrivate if able or run an empty operation.
+                            let v = props.private ? !props.private : false
+                            if (props.setPrivate) props.setPrivate(v)
+                        }}
+                    />
                 </Form.Group>
 
                 <Button variant="primary" type="submit" >
                     Submit
+                </Button>
+                
+                <Button variant="light" type="submit" className='mx-2' onClick={() => {
+                    if (props.setDraft) props.setDraft(true)
+                }}>
+                    Draft
                 </Button>
             </Form>
         </Container>

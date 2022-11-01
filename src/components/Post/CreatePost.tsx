@@ -39,7 +39,7 @@ export const CreatePost = (props: Props) => {
         })
 
         if (res.data.status == 200) {
-            window.location.href = '../..'
+            window.location.href = '/dashboard/'
         }
 
         // Post title already exists.

@@ -15,9 +15,6 @@ export type RouteProps = Props & {
 
 export const DashboardPage = (props: RouteProps) => {
 
-    const paths = {
-        createPost: '/dashboard/post/create' 
-    }
 
 
     useEffect (() => {
@@ -36,19 +33,12 @@ export const DashboardPage = (props: RouteProps) => {
   
         <h1>Dashboard</h1>
 
-        <ListGroup horizontal className='ms-auto'>
-            <Link to={paths.createPost} style={{textDecoration: 'none'}}>
-                <ListGroupItem  className='border rounded'>
-                    Create New Post
-                </ListGroupItem>
-            </Link>
-        </ListGroup>
-        
         <Container>
             <PostManager {...props} />
         </Container>
 
     </>
+
 
     return (
         <>
@@ -56,11 +46,10 @@ export const DashboardPage = (props: RouteProps) => {
 
             <Routes>
                 <Route index path='/' element={element} />
-                <Route path='/dashboard/post/create' element={<CreatePost {...props}/>} />
                 
                 {/* CreatePost and EditPost should be the same component */}
                 {/* <Route path='/post/create' element={<CreatePost {...props}/>} /> */}
-
+                <Route path='/post/create' element={<CreatePost {...props}/>} />
                 <Route path='/post/:postId/edit' element={<EditPost {...props} />} />
             </Routes>
   
