@@ -1,27 +1,28 @@
+import { useEffect, useState } from 'react'
+import { Container, Card } from 'react-bootstrap'
+
 import ReactMarkdown from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
 import remarkGfm from 'remark-gfm'
 
-import {Container, Card, ListGroup, ListGroupItem} from 'react-bootstrap'
-import { useEffect, useState } from 'react'
+import Posts from '../../helpers/Posts'
+
 import { Props } from '../../App'
+import { Link } from 'react-router-dom'
 
 
 
 type PostProps = Props & {
-    title: string,
-    body: string,
-    bodyLimit?: number | undefined,
-    key?: number | undefined,
+    id?: string | undefined,
+    title?: string | undefined,
+    body?: string | undefined,
+    bodyLength?: number | undefined,
 }
 
 export const Post = (props: PostProps) => {
 
-    const [bodyLimit, setBodyLimit] = useState(props.bodyLimit)
-
-    useEffect(() => {
-
-    }, [])
+    // Take control of body length to expand the body when toggled.
+    const [bodyLength, setBodyLength] = useState(props.bodyLength) // maxBodyLength || bodyLength
 
 
     return (
@@ -35,11 +36,13 @@ export const Post = (props: PostProps) => {
             Or for use in the post/create view as the preview version of the post.
          */}
 
-            <Container key={`post-${props.key}`} className='bg-dark text-start text-white'>
+            <Container data-attribute-value={props.id} className='bg-dark text-start'>
 
-                <Card className='bg-dark text-white'>
-                    <Card.Header>
-                        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} children={`# ${props.title}`} />
+                <Card className='bg-dark'>
+                    <Card.Header className='text-light border rounded-top border-light border-1'>
+                        <Link to={`/post/${props.id}`} style={{textDecoration:'none'}} className='text-light'>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} children={`# ${props.title}`} />
+                        </Link>
                     </Card.Header>
                    
                     {/* <ListGroup>
@@ -47,18 +50,18 @@ export const Post = (props: PostProps) => {
                         <ListGroupItem className='bg-dark text-white'>Tag 2</ListGroupItem>
                     </ListGroup> */}
 
-                    <Card.Body>
+                    <Card.Body className='border rounded-bottom border-light border-1'>
                         <ReactMarkdown 
                             remarkPlugins={[remarkGfm]} 
                             rehypePlugins={[rehypeHighlight]} 
-                            children={props.body.substring(0, bodyLimit)} />
+                            children={props.body ? props.body.substring(0, bodyLength) : ""} />
                     </Card.Body>
 
                     {/* Show More body Footer Overlay*/}
-                    { bodyLimit && 
-                        <Card.Footer className='text-center bg-dark' 
-                        style={{marginTop: '-3rem', zIndex: '1'}} 
-                        onClick={(e: any) => setBodyLimit(undefined)}>
+                    { bodyLength && 
+                        <Card.Footer className='text-primary text-center bg-dark border rounded-bottom border-top-0 border-light border-1' 
+                        style={{marginTop: '-2.6rem', zIndex: '1'}} 
+                        onClick={(e: any) => setBodyLength(undefined)}>
                             Load More
                         </Card.Footer>
                     }
@@ -70,5 +73,5 @@ export const Post = (props: PostProps) => {
 
 
 
-
+export default Post
 

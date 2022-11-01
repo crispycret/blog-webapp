@@ -17,10 +17,12 @@ import User from './helpers/User'
 import MyNavbar from "./components/Navbar/MyNavbar";
 import { Authentication } from './components/Authentication/Authentication';
 
-import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
+import HomePage from './pages/HomePage';
+import DashboardPage from './pages/DashboardPage';
 import PostForm from './components/Post/PostForm';
 import { CreatePost } from './components/Post/CreatePost';
+import Posts from './helpers/Posts';
+import PostPage from './pages/PostPage';
 
 
 /*
@@ -33,24 +35,31 @@ export type Props = {
   user: User,
   showAuth: boolean,
   setShowAuth: React.Dispatch<React.SetStateAction<boolean>>,
+  posts: Posts
 }
 
 
 function App() {
 
   let api = API()
+  
   let user = User(api)
   const [showAuth, setShowAuth] = useState(false)
+
+  let posts = Posts(api)
+
 
   const props = {
     api,
     user,
-    showAuth,
-    setShowAuth,
+    showAuth, setShowAuth,
+    posts,
   }
 
+
+
   return (
-    <div className="App">
+    <div className="App bg-dark text-light">
 
       <Authentication {...props}/>
       <MyNavbar {...props}/>
@@ -59,18 +68,19 @@ function App() {
         <Routes>
           
           {/* <Route path='/' element={<Layout {...props} />} />  */}
-          <Route index element={<Home {...props} />} />
+          <Route index element={<HomePage {...props} />} />
+
+          <Route path='/post/:postId' element={<PostPage {...props} />} />
           
           {/* Put this in the dashboard forward to /dashboard/post/create */}
-          {user.active && user.isAdmin &&
-            <Route path='/post/create' element={<CreatePost {...props}/>} />
-          }
+          {props.user.active && props.user.isAdmin &&
+            <Route path='/dashboard/*' element={<DashboardPage {...props}/>} />
+          } 
   
           
         </Routes>
       </Router>
 
-      {/* <Home {...props}/> */}
     </div>
   );
 }

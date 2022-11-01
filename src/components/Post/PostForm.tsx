@@ -1,37 +1,33 @@
-import { AxiosError } from "axios";
+import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
+
+
 import { Props } from "../../App";
 
 
-// type Props = {
-//     children?: JSX.Element;
-// }
-
-// export const PostForm = ({children}: Props)  => {
-//     return <> {children} </> 
-// }
-
-
-
-//  Make a Form version and a Preview version using tags
-// Don't do this here do it where the PostForm component is being used.
-
-type PostForm = Props & {
+export type PostForm = Props & {
     title: string,
     setTitle: (arg0: string) => void,
+
     body: string,
     setBody: (arg0: string) => void,
+    
+    handleSubmit: () => Promise<AxiosResponse<any, any>>,
+    
+    errorMsg: string,
+    setErrorMsg: React.Dispatch<React.SetStateAction<string>>,
+    
+    showError: boolean,
+    setShowError: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 export const PostForm = (props: PostForm) => {
 
-    const [showError, setShowError] = useState(false)
-    const [errorMsg, setErrorMsg] = useState("Login Failed")
     const errorComponent = <>
         <Form.Text>
             <div className="alert alert-danger" role="alert">
-                {errorMsg}
+                {props.errorMsg}
             </div>    
         </Form.Text>
     </>
@@ -44,31 +40,15 @@ export const PostForm = (props: PostForm) => {
 
         e.preventDefault();
 
-        let data = {
-            title: props.title,
-            body: props.body
-        }
-        
-        let res = await props.api.client.post('/post/create', data)
-        
-        .catch((error: AxiosError) => {
-            return Promise.reject(error);
-        })
+        props.handleSubmit();
 
-        if (res.data.status == 200) {
-            window.location.href = '../..'
-        }
-
-        // Post title already exists.
-        if (res.data.status == 409) {
-            setShowError(true)
-            setErrorMsg(res.data.body)
-        }
-
-        return res
-        
+   
     }
 
+    
+    useEffect(() => {
+        console.log(props.title)
+    }, [])
 
 
     return <>
@@ -77,7 +57,7 @@ export const PostForm = (props: PostForm) => {
 
             <Form className='mt-3 mx-auto' onSubmit={e => handleSubmit(e)}>
 
-                {showError && <Form.Group className='mt-2 pt-2'>{errorComponent}</Form.Group>}
+                {props.showError && <Form.Group className='mt-2 pt-2'>{errorComponent}</Form.Group>}
 
                 <Form.Group className="mb-3" controlId="postForm.Title">
                     <Form.Label>Title</Form.Label>
