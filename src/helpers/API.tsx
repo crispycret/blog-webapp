@@ -48,12 +48,12 @@ export type API = {
     let [cookies, setCookie, removeCookie] = useCookies()
 
     let client_config: ClientConfig = {
-      baseURL: 'https://bnadeau-blog-api.herokuapp.com/',
-      // baseURL: 'http://localhost:5000/',
+      // baseURL: 'https://bnadeau-blog-api.herokuapp.com/',
+      baseURL: 'http://localhost:5000/',
       
       headers: {}
     }
-  
+    
     let client = axios.create(client_config)
     const reconnect = () => client = axios.create(client_config)
 

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, CreateAxiosDefaults, RawAxiosRequestHeaders } from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   BrowserRouter as Router,
@@ -55,6 +55,11 @@ function App() {
     showAuth, setShowAuth,
     posts,
   }
+
+
+  useEffect (() => {
+
+  }, [])
 
 
 
