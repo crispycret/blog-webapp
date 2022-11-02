@@ -58,14 +58,29 @@ export const Posts = (props: API) => {
         return res
     }
 
+
+    const getComments = async (postId: string) => {
+
+        let res = await props.client.get(`/post/${postId}/comments`)
+    
+    }
+    
+
     return {
         posts,
         getPost,
         getPosts,
         updatePost,
         deletePost,
+
+        getComments,
     }
 
 }
+
+
+
+
+
 
 export default Posts;
