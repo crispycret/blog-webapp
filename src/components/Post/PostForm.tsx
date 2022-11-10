@@ -1,37 +1,40 @@
-import { AxiosError } from "axios";
+import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
+
+
 import { Props } from "../../App";
 
 
-// type Props = {
-//     children?: JSX.Element;
-// }
-
-// export const PostForm = ({children}: Props)  => {
-//     return <> {children} </> 
-// }
-
-
-
-//  Make a Form version and a Preview version using tags
-// Don't do this here do it where the PostForm component is being used.
-
-type PostForm = Props & {
+export type PostForm = Props & {
     title: string,
     setTitle: (arg0: string) => void,
+
     body: string,
     setBody: (arg0: string) => void,
+
+    private?: boolean,
+    setPrivate?: (arg0: boolean) => void,
+    draft?: boolean
+    setDraft?: (arg0: boolean) => void,
+    
+    handleSubmit: () => Promise<AxiosResponse<any, any>>,
+    
+    errorMsg: string,
+    setErrorMsg: React.Dispatch<React.SetStateAction<string>>,
+    
+    showError: boolean,
+    setShowError: React.Dispatch<React.SetStateAction<boolean>>,
+
+
 }
 
 export const PostForm = (props: PostForm) => {
 
-    const [showError, setShowError] = useState(false)
-    const [errorMsg, setErrorMsg] = useState("Login Failed")
     const errorComponent = <>
         <Form.Text>
             <div className="alert alert-danger" role="alert">
-                {errorMsg}
+                {props.errorMsg}
             </div>    
         </Form.Text>
     </>
@@ -44,40 +47,24 @@ export const PostForm = (props: PostForm) => {
 
         e.preventDefault();
 
-        let data = {
-            title: props.title,
-            body: props.body
-        }
-        
-        let res = await props.api.client.post('/post/create', data)
-        
-        .catch((error: AxiosError) => {
-            return Promise.reject(error);
-        })
+        props.handleSubmit();
 
-        if (res.data.status == 200) {
-            window.location.href = '../..'
-        }
-
-        // Post title already exists.
-        if (res.data.status == 409) {
-            setShowError(true)
-            setErrorMsg(res.data.body)
-        }
-
-        return res
-        
+   
     }
 
+    
+    useEffect(() => {
+        console.log(props.title)
+    }, [])
 
 
     return <>
-        <Container className='mx-auto bg-dark text-white text-start'>
+        <Container fluid className='mx-auto bg-dark text-white text-start'>
 
 
             <Form className='mt-3 mx-auto' onSubmit={e => handleSubmit(e)}>
 
-                {showError && <Form.Group className='mt-2 pt-2'>{errorComponent}</Form.Group>}
+                {props.showError && <Form.Group className='mt-2 pt-2'>{errorComponent}</Form.Group>}
 
                 <Form.Group className="mb-3" controlId="postForm.Title">
                     <Form.Label>Title</Form.Label>
@@ -93,9 +80,9 @@ export const PostForm = (props: PostForm) => {
                 </Form.Group>
 
 
-                <Form.Group className="mb-3" controlId="postForm.Tags">
+                <Form.Group  className="mb-3" controlId="postForm.Tags">
                     <Form.Label>Tags</Form.Label>
-                    <Form.Control type="Tags" placeholder="Find Form Tag Module" />
+                    <Form.Control disabled type="Tags" placeholder="Find Form Tag Module" />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="postForm.Body">
@@ -105,12 +92,27 @@ export const PostForm = (props: PostForm) => {
                     />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="make private" />
+                <Form.Group className="py-3" controlId="postFrom.formOptions">
+                    <Form.Label>Options</Form.Label>
+                    <Form.Check type="checkbox" label="Private" 
+                        checked={props.private ? props.private : false} 
+                        onChange={ () => {
+                            // Reverse the value of private or use false
+                            // setPrivate if able or run an empty operation.
+                            let v = props.private ? !props.private : false
+                            if (props.setPrivate) props.setPrivate(v)
+                        }}
+                    />
                 </Form.Group>
 
                 <Button variant="primary" type="submit" >
                     Submit
+                </Button>
+                
+                <Button variant="light" type="submit" className='mx-2' onClick={() => {
+                    if (props.setDraft) props.setDraft(true)
+                }}>
+                    Draft
                 </Button>
             </Form>
         </Container>

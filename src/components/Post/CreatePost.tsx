@@ -1,9 +1,13 @@
+import { AxiosError } from 'axios'
 import { useState, useEffect } from 'react'
 import { Container, Tabs, Tab } from "react-bootstrap"
 import { Props } from "../../App"
 
-import { Post } from "./Post"
+import '../../assets/css/create_post.css'
+
+import Post  from "./Post"
 import PostForm from "./PostForm"
+
 
 
 export const CreatePost = (props: Props) => {
@@ -16,28 +20,66 @@ export const CreatePost = (props: Props) => {
         body, setBody
     }
 
+    const [showError, setShowError] = useState(false)
+    const [errorMsg, setErrorMsg] = useState('')
+
+
+    const handleSubmit = async () => {
+        let data = {
+            title: postProps.title,
+            body: postProps.body
+        }
+        
+        let res = await props.api.client.post('/blog/post/create', data)
+        
+        .catch((error: AxiosError) => {
+            return Promise.reject(error);
+        })
+
+        if (res.data.status == 200) {
+            window.location.href = '/dashboard/'
+        }
+
+        // Post title already exists.
+        if (res.data.status == 409) {
+            setShowError(true)
+            setErrorMsg(res.data.body)
+        }
+        return res
+    }
+
+
+    const postFormProps = {
+        showError, setShowError,
+        errorMsg, setErrorMsg,
+        handleSubmit
+    }
 
     useEffect(() => {
     }, [])
 
-
     return (
-        <Container>
-            <Tabs
-                defaultActiveKey="edit"
-                id="create-post-tabs"
-                className="mb-3"
-            >
-                <Tab eventKey="edit" title="Edit">
-                    {/* <PostForm {...props} title={title} setTitle={setTitle} body={body} setBody={setBody}/> */}
-                    <PostForm {...props} {...postProps} />
-                </Tab>
-                <Tab eventKey="view" title="View">
-                    <Post {...props} {...postProps} />
-                </Tab>
-            </Tabs>
+        <Container fluid className='bg-dark text-white'>
+            <Container>
+                <h1>Create New Post</h1>
+                <Tabs
+                    defaultActiveKey="edit"
+                    id="createbo-post-tabs"
+                    className="mb-3 border-0"
+                >
+                    <Tab eventKey="edit" title="Edit">
+                        <PostForm {...props} {...postProps} {...postFormProps} />
+                    </Tab>
+                    <Tab eventKey="view" title="View">
+                        <Post {...props} {...postProps} />
+                    </Tab>
+                </Tabs>
+            </Container>
         </Container>
     )
 
 
 }
+
+
+export default CreatePost;

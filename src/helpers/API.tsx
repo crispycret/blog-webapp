@@ -53,7 +53,7 @@ export type API = {
       
       headers: {}
     }
-  
+    
     let client = axios.create(client_config)
     const reconnect = () => client = axios.create(client_config)
 

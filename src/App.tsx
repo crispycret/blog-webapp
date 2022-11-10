@@ -1,26 +1,28 @@
 import axios, { AxiosInstance, CreateAxiosDefaults, RawAxiosRequestHeaders } from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link
+  Navigate
 } from "react-router-dom";
 
+import { Container } from 'react-bootstrap';
 
 import './assets/css/App.css';
 
 import API from './helpers/API';
 import User from './helpers/User'
 
+import Authentication from './components/Authentication/Authentication';
 import MyNavbar from "./components/Navbar/MyNavbar";
-import { Authentication } from './components/Authentication/Authentication';
 
-import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
-import PostForm from './components/Post/PostForm';
-import { CreatePost } from './components/Post/CreatePost';
+import HomePage from './pages/HomePage';
+import DashboardPage from './pages/DashboardPage';
+
+import Posts from './helpers/Posts';
+import PostPage from './pages/PostPage';
 
 
 /*
@@ -33,24 +35,37 @@ export type Props = {
   user: User,
   showAuth: boolean,
   setShowAuth: React.Dispatch<React.SetStateAction<boolean>>,
+  posts: Posts
 }
 
 
 function App() {
 
   let api = API()
+  
   let user = User(api)
   const [showAuth, setShowAuth] = useState(false)
+
+  let posts = Posts(api)
+
 
   const props = {
     api,
     user,
-    showAuth,
-    setShowAuth,
+    showAuth, setShowAuth,
+    posts,
   }
 
+
+  useEffect (() => {
+
+  }, [])
+
+
+
   return (
-    <div className="App">
+    <Container fluid className="App bg-dark text-light px-0 mx-0 " style={{minHeight:'100vh'}}>
+
 
       <Authentication {...props}/>
       <MyNavbar {...props}/>
@@ -59,19 +74,33 @@ function App() {
         <Routes>
           
           {/* <Route path='/' element={<Layout {...props} />} />  */}
-          <Route index element={<Home {...props} />} />
+          <Route index element={<HomePage {...props} />} />
+          <Route path='/' element={<HomePage {...props} />} />
+
+          <Route path='/post/:postId' element={<PostPage {...props} />} />
           
+
           {/* Put this in the dashboard forward to /dashboard/post/create */}
-          {user.active && user.isAdmin &&
-            <Route path='/post/create' element={<CreatePost {...props}/>} />
+          {/* <Route path='/dashboard/*' element={ */}
+              {/* props.user.isAdmin ?  */}
+              {/* <DashboardPage {...props}/> : <Navigate to="/" replace /> */}
+          {/* } /> */}
+
+          {props.user.active && props.user.isAdmin &&
+            <Route path='/dashboard/*' element={
+                <DashboardPage {...props}/> 
+            } />
           }
+
+          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
   
           
         </Routes>
+
+        <Container className='bg-dark py-5'></Container>
       </Router>
 
-      {/* <Home {...props}/> */}
-    </div>
+    </Container>
   );
 }
 

@@ -1,19 +1,22 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Container, Card } from 'react-bootstrap'
+
 import { AxiosError } from "axios"
 
+import Post from './Post'
+
 import { Props } from "../../App"
-import { Post } from './Post'
 
 
 
 export const PostList = (props: Props) => {
 
-    const [posts, setPosts] = useState<JSX.Element[]>([<></>])
+    const [posts, setPosts] = useState<JSX.Element[]>([<div key={0}/>])
 
     const getPosts = async () => {
         
-        let res = await props.api.client.get('/post/all')
+        let res = await props.api.client.get('/blog/posts')
         
         .catch((error: AxiosError) => {
             return Promise.reject(error);
@@ -22,15 +25,12 @@ export const PostList = (props: Props) => {
         if (res.data.status == 200) {
             // Store raw posts data ??
             
-            // // For each post object in the request create a post element.
+            // // For each post object in the response create a post element.
             setPosts(
-                res.data.body.posts.map((post: any) => <>
-                    <Container className='mb-3'>
-                        <Card>
-                            <Post {...props} title={post.title} body={post.body} bodyLimit={500}/>            
-                        </Card>
-                    </Container>
-                </>
+                res.data.body.posts.map((post: any) =>
+                <Container key={post.id} className='py-2'>
+                    <Post {...props} id={post.id} title={post.title} body={post.body} bodyLength={500} />            
+                </Container>
             ))
         }
 
@@ -44,9 +44,10 @@ export const PostList = (props: Props) => {
 
 
     return (
-        <>
+        <Container>
+            <div className='pt-4'> </div>
             {posts}
-        </>
+        </Container>
     )
 }
 

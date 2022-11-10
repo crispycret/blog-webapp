@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { Container, Modal, Form, Button, Tabs, Tab } from "react-bootstrap"
+
 import { Props } from "../../App"
 
 
@@ -200,4 +201,7 @@ export const Authentication = (props: Props, _show=false) => {
     )
 
 }
+
+
+export default Authentication
 
