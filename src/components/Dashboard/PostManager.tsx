@@ -74,6 +74,13 @@ export const PostManager = (props: Props) => {
                 </ListGroup>
 
                 <ListGroup className='px-0 mx-0'>
+
+                    { props.posts.posts.length == 0 &&
+                        <ListGroupItem key='empty' className='border rounded-0'>
+                            No available posts
+                        </ListGroupItem>
+                    }
+
                     { props.posts.posts.map((post: any, i: number, row: any) => 
         
                         <ListGroupItem key={post.id} className='border rounded-0'>
@@ -84,7 +91,7 @@ export const PostManager = (props: Props) => {
                                 <Col className='col-1'>
                                     <Row>
                                         <Col><Link to={`/dashboard/post/${post.id}/edit`} style={{textDecoration:'none'}}><FaRegEdit /></Link></Col>
-                                        <Col><AiFillDelete className='text-danger' onClick={() => {setShowDeletePopup(true); setSelectedId(post.id)}}/></Col>
+                                        <Col><Link to='' style={{textDecoration:'none'}}><AiFillDelete className='text-danger' onClick={() => {setShowDeletePopup(true); setSelectedId(post.id)}}/></Link></Col>
                                     </Row>
                                 </Col>
                             </Row>

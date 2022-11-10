@@ -29,7 +29,7 @@ export type User = {
 export const User = (props: API) => {
 
 
-    let path = '/user'
+    let path = '/auth'
 
     // Boolean value for if the user is logged in.
     let [active, setActive] = useState(false);
@@ -69,7 +69,7 @@ export const User = (props: API) => {
             props.setCookie('user_active', true, { path: '/', sameSite: true })
             props.setCookie('user_email', data.user.email, { path: '/', sameSite: true })
             props.setCookie('user_publicId', data.user.public_id, { path: '/', sameSite: true })
-            props.setCookie('user_isAdmin', data.user.is_admin, { path: '/', sameSite: true })
+            props.setCookie('user_isAdmin', data.user.privilege, { path: '/', sameSite: true })
 
             // Add the authorization token to every new request made.
             props.setHeader('Authorization', token)
@@ -113,7 +113,7 @@ export const User = (props: API) => {
             password,
         }
 
-        let res = await props.client.post(`/login`, data)
+        let res = await props.client.post(`${path}/login`, data)
 
         .catch((error: AxiosError) => {
             return Promise.reject(error);
@@ -128,7 +128,7 @@ export const User = (props: API) => {
             setActive(true)
             setPublicId(res.data.body.user.public_id)
             setEmail(res.data.body.user.email)
-            setIsAdmin(res.data.body.user.is_admin)
+            setIsAdmin(res.data.body.user.privilege)
 
             // Set cookies
             setCookies(res.data.body)
@@ -152,7 +152,7 @@ export const User = (props: API) => {
      */
     const logout = async() => {
 
-        let res = await props.client.post(`/logout`)
+        let res = await props.client.post(`${path}/logout`)
         
         .catch((error: AxiosError) => {
             clear()
@@ -186,7 +186,7 @@ export const User = (props: API) => {
      * @returns 
      */
     const register = async (email: string, password: string) => {
-        let res = await props.client.post('/register')
+        let res = await props.client.post(`${path}/user/register`)
         return res
     }
 
@@ -227,7 +227,7 @@ export const User = (props: API) => {
     */
     const validate = async () => {
         
-        let res = await props.client.get("/token/validate")
+        let res = await props.client.get(`${path}/token/validate`)
         .catch (err => {
             clear()
             return Promise.reject(err)

@@ -16,7 +16,7 @@ export const PostList = (props: Props) => {
 
     const getPosts = async () => {
         
-        let res = await props.api.client.get('/post/all')
+        let res = await props.api.client.get('/blog/posts')
         
         .catch((error: AxiosError) => {
             return Promise.reject(error);

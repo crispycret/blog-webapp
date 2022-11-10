@@ -21,7 +21,8 @@ export const Posts = (props: API) => {
         
         // [NOTE] To retrieve data using the user, load user data from cookies
 
-        let res = await props.client.get('/post/all')
+        // let res = await props.client.get('/blog/posts/limit/10')
+        let res = await props.client.get('/blog/posts')
         
         .catch((error: AxiosError) => {
             return Promise.reject(error);
@@ -36,7 +37,7 @@ export const Posts = (props: API) => {
 
 
     const getPost = async (id: string) => {
-        let res = await props.client.get(`post/${id}`)
+        let res = await props.client.get(`/blog/post/${id}`)
 
         return res
     }
@@ -48,20 +49,20 @@ export const Posts = (props: API) => {
             title,
             body
         }
-        let res = await props.client.patch(`post/${id}/update`, data)
+        let res = await props.client.patch(`/blog/post/${id}/update`, data)
         return res
     }
 
 
     const deletePost = async (id: string) => {
-        let res = await props.client.delete(`post/${id}/delete`)
+        let res = await props.client.delete(`/blog/post/${id}/delete`)
         return res
     }
 
 
     const getComments = async (postId: string) => {
 
-        let res = await props.client.get(`/post/${postId}/comments`)
+        let res = await props.client.get(`/blog/post/${postId}/comments`)
     
     }
     

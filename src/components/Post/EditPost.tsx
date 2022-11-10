@@ -63,7 +63,7 @@ export const EditPost = (props: Props) => {
                 body: postProps.body
             }
             
-            let res = await props.api.client.post('/post/create', data)
+            let res = await props.api.client.post('/blog/post/create', data)
             
             .catch((error: AxiosError) => {
                 return Promise.reject(error);
