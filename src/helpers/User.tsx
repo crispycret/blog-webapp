@@ -14,7 +14,7 @@ export type User = {
     email: string;
     isAdmin: boolean;
 
-    register: (_email: string, password: string) => Promise<AxiosResponse<any, any>>;
+    register: (username: string, _email: string, password: string) => Promise<AxiosResponse<any, any>>;
     login: (_email: string, password: string) => Promise<AxiosResponse<any, any>>;
     logout: () => Promise<AxiosResponse<any, any>>;
     update: () => Promise<AxiosResponse<any, any>>;
@@ -185,8 +185,9 @@ export const User = (props: API) => {
      * @param password 
      * @returns 
      */
-    const register = async (email: string, password: string) => {
-        let res = await props.client.post(`${path}/user/register`)
+    const register = async (username: string, email: string, password: string) => {
+        let data = {username, email, password}
+        let res = await props.client.post(`${path}/user/create`, data)
         return res
     }
 

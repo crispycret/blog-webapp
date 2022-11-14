@@ -30,7 +30,7 @@ export const MyNavbar = (props: Props) => {
               {/* Display Features to authenticate */}
               {!props.user.active &&
                 // Enable the Authentication component
-                <Nav.Link href="#pages" onClick={e => props.setShowAuth(true)}>Login</Nav.Link>
+                <Nav.Link href='' onClick={e => props.setShowAuth(true)}>Login</Nav.Link>
               }
 
                 {/* Display Features with authentication */}
@@ -47,7 +47,7 @@ export const MyNavbar = (props: Props) => {
                       {props.user.active && props.user.isAdmin &&
                         <>
                           <NavDropdown.Item href='/dashboard'>Dashboard</NavDropdown.Item>
-                          <NavDropdown.Item href='/dashboard/post/create'>New Post</NavDropdown.Item>
+                          {/* <NavDropdown.Item href='/dashboard/post/create'>New Post</NavDropdown.Item> */}
                           <NavDropdown.Divider />
                         </>
                       }
