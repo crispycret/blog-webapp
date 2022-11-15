@@ -48,8 +48,8 @@ export type API = {
     let [cookies, setCookie, removeCookie] = useCookies()
 
     let client_config: ClientConfig = {
-      baseURL: 'https://bnadeau-blog-api.herokuapp.com/',
-      // baseURL: 'http://localhost:5000/',
+      // baseURL: 'https://bnadeau-blog-api.herokuapp.com/',
+      baseURL: 'http://localhost:5000/',
       
       headers: {}
     }
@@ -57,10 +57,16 @@ export type API = {
     let client = axios.create(client_config)
     const reconnect = () => client = axios.create(client_config)
 
+    /*
+     * Extend the header of all client requests with a given header key and value 
+    */
     const setHeader = (key: string, value: string) => {
         axios.defaults.headers.common[key] = value
     }
 
+    /*
+     * Remove the provided header key from all  client requests. 
+    */
     const deleteHeader = (key: string) => {
         delete axios.defaults.headers.common[key]
     }
@@ -74,6 +80,7 @@ export type API = {
         cookies, setCookie, removeCookie,   
         client_config,
         client,
+
         reconnect,
         setHeader,
         deleteHeader
