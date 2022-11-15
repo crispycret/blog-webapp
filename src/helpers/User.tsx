@@ -12,7 +12,7 @@ import API from "./API";
 export type User = {
     active: boolean;
     email: string;
-    isAdmin: boolean;
+    privilege: number;
 
     register: (username: string, _email: string, password: string) => Promise<AxiosResponse<any, any>>;
     login: (_email: string, password: string) => Promise<AxiosResponse<any, any>>;
@@ -38,7 +38,7 @@ export const User = (props: API) => {
     let [email, setEmail] = useState("")
 
     // state of the user that will allow access to features and pages that should be restricted to normal users.
-    let [isAdmin, setIsAdmin] = useState(false)
+    let [privilege, setPrivilege] = useState(0)
 
     // state of the user provided by the server upon successful login
     let public_id = ""
@@ -52,7 +52,7 @@ export const User = (props: API) => {
         setActive(true)
         setEmail(props.cookies.user_email)
         setPublicId(props.cookies.user_publicId)
-        setIsAdmin(props.cookies.user_isAdmin)
+        setPrivilege(props.cookies.user_privilege)
         
         // Re-add request headers that should persist for every request
         props.setHeader('Authorization', props.cookies.Authorization)
@@ -69,7 +69,7 @@ export const User = (props: API) => {
             props.setCookie('user_active', true, { path: '/', sameSite: true })
             props.setCookie('user_email', data.user.email, { path: '/', sameSite: true })
             props.setCookie('user_publicId', data.user.public_id, { path: '/', sameSite: true })
-            props.setCookie('user_isAdmin', data.user.privilege, { path: '/', sameSite: true })
+            props.setCookie('user_privilege', data.user.privilege, { path: '/', sameSite: true })
 
             // Add the authorization token to every new request made.
             props.setHeader('Authorization', token)
@@ -83,7 +83,7 @@ export const User = (props: API) => {
         // Clear user propery values
         setActive(false)
         setEmail("")
-        setIsAdmin(false)
+        setPrivilege(0)
         setPublicId("")
                     
         // Clear cookies
@@ -128,7 +128,7 @@ export const User = (props: API) => {
             setActive(true)
             setPublicId(res.data.body.user.public_id)
             setEmail(res.data.body.user.email)
-            setIsAdmin(res.data.body.user.privilege)
+            setPrivilege(res.data.body.user.privilege)
 
             // Set cookies
             setCookies(res.data.body)
@@ -263,7 +263,7 @@ export const User = (props: API) => {
     return {
         active,
         email,
-        isAdmin,
+        privilege,
 
         login,
         logout,

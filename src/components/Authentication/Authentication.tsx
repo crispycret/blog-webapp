@@ -77,10 +77,12 @@ export const Authentication = (props: Props, _show=false) => {
         e.preventDefault();
         const selectedForm = e.target.id
 
+        console.log(selectedForm)
+
+
         // Enable Loading Visual
         setIsLoading(true)
         
-        console.log(selectedForm)
 
         if (selectedForm == 'login'){
             handleLogin()
@@ -153,7 +155,7 @@ export const Authentication = (props: Props, _show=false) => {
                                     <Form.Group className="mb-3" controlId="formBasicCheckbox">
                                         <Form.Check type="checkbox" label="Remember Me" />
                                     </Form.Group>
-                                    <Button variant="primary" type="submit" ref={loginRef}>Login</Button>
+                                    <Button variant="primary" type="submit">Login</Button>
                                 </Form>
                             </Modal.Footer>
                         </Tab>
@@ -168,9 +170,9 @@ export const Authentication = (props: Props, _show=false) => {
                                     
                                     <Form.Group className="mb-3" controlId="formBasicUsername">
                                         <Form.Label>Username</Form.Label>
-                                        <Form.Control type="email" placeholder="Enter Username" value={username} onChange={e => setUsername(e.currentTarget.value)}/>
+                                        <Form.Control type="username" placeholder="Enter Username" value={username} onChange={e => setUsername(e.currentTarget.value)}/>
                                         <Form.Text className="text-muted">
-                                            
+                                            ssss
                                         </Form.Text>
                                     </Form.Group>
 
@@ -189,13 +191,13 @@ export const Authentication = (props: Props, _show=false) => {
 
                                     <Form.Group className="mb-3" controlId="formBasicPassword">
                                         <Form.Label>Confirm Password</Form.Label>
-                                        <Form.Control type="password" placeholder="Password" value={password} onChange={e => setPassword(e.currentTarget.value)}/>
+                                        <Form.Control type="password" placeholder="Password" value={confirmPassword} onChange={e => setConfirmPassword(e.currentTarget.value)}/>
                                     </Form.Group>
 
                                     <Form.Group className="mb-3" controlId="formBasicCheckbox">
                                         <Form.Check type="checkbox" label="Remember Me" />
                                     </Form.Group>
-                                    <Button variant="primary" type="submit" ref={registerRef}>Register</Button>
+                                    <Button variant="primary" type="submit">Register</Button>
                                 </Form>
                             </Modal.Footer>
                         </Tab>

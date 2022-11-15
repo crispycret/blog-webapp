@@ -44,7 +44,7 @@ export const MyNavbar = (props: Props) => {
                       <NavDropdown.Divider />
 
                       {/* Admin Authentication */}
-                      {props.user.active && props.user.isAdmin &&
+                      {props.user.privilege > 0 &&
                         <>
                           <NavDropdown.Item href='/dashboard'>Dashboard</NavDropdown.Item>
                           {/* <NavDropdown.Item href='/dashboard/post/create'>New Post</NavDropdown.Item> */}

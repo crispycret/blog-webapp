@@ -20,11 +20,11 @@ export const DashboardPage = (props: RouteProps) => {
 
 
     useEffect (() => {
-        if (!props.user.isAdmin) {
+        if (props.user.privilege == 0) {
             // window.location.href = '/'
         }
 
-        if(props.user.isAdmin) {
+        if(props.user.privilege > 0) {
             console.log("UPDATE")
             props.posts.getPosts()
         }
@@ -48,7 +48,7 @@ export const DashboardPage = (props: RouteProps) => {
 
             <Routes>
 
-                {!props.user.active && !props.user.isAdmin &&
+                {!props.user.active && props.user.privilege == 0 &&
                     <Navigate to='/' replace/>
                 }
                 
