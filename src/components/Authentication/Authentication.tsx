@@ -22,6 +22,7 @@ export const Authentication = (props: Props, _show=false) => {
 
     const [isLoading, setIsLoading] = useState(false)
 
+
     const [showRegisterError, setShowRegisterError] = useState(false)
     const [registerErrorMsg, setRegisterErrorMsg] = useState("Registration Failed")
     const registerErrorComponent = <>
@@ -34,7 +35,6 @@ export const Authentication = (props: Props, _show=false) => {
     const handleClose = () => {
         props.setShowAuth(false)
     }
-
 
     
     const handleRegister = () => {
@@ -111,7 +111,9 @@ export const Authentication = (props: Props, _show=false) => {
                         {/* Display Login Tab */}
                         <Tab eventKey="login" title="Login" className="btn-dark bg-dark">
                             <Modal.Footer>
+                            
                                 <Login {...props} handleClose={handleClose}/>
+                                
                             </Modal.Footer>
                         </Tab>
 
