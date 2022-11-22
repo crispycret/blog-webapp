@@ -86,7 +86,7 @@ function App() {
               {/* <DashboardPage {...props}/> : <Navigate to="/" replace /> */}
           {/* } /> */}
 
-          {props.user.active && props.user.isAdmin &&
+          {props.user.active && props.user.privilege > 0 &&
             <Route path='/dashboard/*' element={
                 <DashboardPage {...props}/> 
             } />
