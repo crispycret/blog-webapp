@@ -1,34 +1,10 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+  .loading-symbol {
+    animation: loading-symbol-spin infinite 3s linear;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
+@keyframes loading-symbol-spin {
   from {
     transform: rotate(0deg);
   }
@@ -36,3 +12,49 @@
     transform: rotate(360deg);
   }
 }
+
+/* Authentication Pop Up */
+
+.auth-loading-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.loading-symbol {
+  color: #0080FF;
+}
+
+.auth-loading-overlay div {
+  display: flex;
+  width: 60%;
+  height: 100%;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 28px;
+}
+
+.modal {
+  --bs-modal-footer-border-color: #212529;
+}
+
+.nav-tabs {
+  --bs-nav-tabs-border-width: 0px;
+}
+
+
+.nav-tabs .nav-item button.nav-link {
+  /* background-color: #FFF; */
+  color: #0080FF;
+  border-color: black;
+  --bs-nav-tabs-border-width: 0px;
+  --bs-nav-tabs-border-color: #000;
+  --bs-modal-footer-border-color: #212529;
+}
+
+.nav-tabs .nav-item button.nav-link.active {
+  background-color: #0080FF;
+  border-color: black;
+  color: #FFF;
+}
+
