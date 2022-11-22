@@ -4,6 +4,7 @@ import { Container, Card } from 'react-bootstrap'
 import ReactMarkdown from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
 import remarkGfm from 'remark-gfm'
+import rehypeRaw from "rehype-raw";
 
 import Posts from '../../helpers/Posts'
 
@@ -31,7 +32,6 @@ export const Post = (props: PostProps) => {
             Use this in the Home() page an actual post page will be described below.
             Show a piece of the react markdown and if the user clicks the body or the header have the markdown expand.
 
-
             Use this for a dedicated Post() page. post/title/
             Or for use in the post/create view as the preview version of the post.
          */}
@@ -39,9 +39,9 @@ export const Post = (props: PostProps) => {
             <Container data-attribute-value={props.id} className='bg-dark text-start'>
 
                 <Card className='bg-dark'>
-                    <Card.Header className='text-light border rounded-top border-light border-1'>
+                    <Card.Header className='border rounded-top border-light border-1'>
                         <Link to={`/post/${props.id}`} style={{textDecoration:'none'}} className='text-light'>
-                            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} children={`# ${props.title}`} />
+                            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight, rehypeRaw]} children={`# ${props.title}`} />
                         </Link>
                     </Card.Header>
                    
@@ -53,7 +53,7 @@ export const Post = (props: PostProps) => {
                     <Card.Body className='border rounded-bottom border-light border-1'>
                         <ReactMarkdown 
                             remarkPlugins={[remarkGfm]} 
-                            rehypePlugins={[rehypeHighlight]} 
+                            rehypePlugins={[rehypeHighlight, rehypeRaw]} 
                             children={props.body ? props.body.substring(0, bodyLength) : ""} />
                     </Card.Body>
 
