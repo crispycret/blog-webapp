@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import { Container, Modal, Form, Button, Tabs, Tab } from "react-bootstrap"
+import { Props } from "../../App"
 
 
+export type LoginProps = Props & {handleClose: () => void}
 
-export const Login = (props: any, handleClose: any) => {
+export const Login = (props: LoginProps) => {
 
 
     const loginForm = useRef<HTMLFormElement>(null)
@@ -22,22 +24,32 @@ export const Login = (props: any, handleClose: any) => {
     </>
 
 
-    const handleLogin = () => {
-        props.user.login(email, password).then((res: any) => {
-            if (res.data.status == 200) {
-                setShowLoginError(false)
-                handleClose();
+    const handleLogin = async () => {
+        let response = await props.user.login(email, password)
+        // props.user.login(email, password)
+        // .catch(err => {
+        //     console.log("handleLogin.catch")
+        //     return Promise.reject(err)
+        // })
+        // .then((res) => {
+        //     console.log("handleLogin.catch")
+        //     console.log(res)
+            // if (res.data.status == 200) {
+            //     setShowLoginError(false)
+            //     // Check Email Authentication
+
+            //     // handleClose();
             
-            }else {
-                setShowLoginError(true)
-                setLoginErrorMsg(res.data.msg)
-            }
-        })
+            // }else {
+            //     setShowLoginError(true)
+            //     // setLoginErrorMsg(res.data.msg)
+            // }
+        // })
     }
 
 
     const onSubmit = (e: any) => {
-
+        handleLogin()
     }
 
     return (

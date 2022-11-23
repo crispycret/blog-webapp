@@ -66,39 +66,8 @@ function App() {
   return (
     <Container fluid className="App bg-dark text-light px-0 mx-0 " style={{minHeight:'100vh'}}>
 
-
       <Authentication {...props}/>
       <MyNavbar {...props}/>
-
-      <Router>
-        <Routes>
-          
-          {/* <Route path='/' element={<Layout {...props} />} />  */}
-          <Route index element={<HomePage {...props} />} />
-          <Route path='/' element={<HomePage {...props} />} />
-
-          <Route path='/post/:postId' element={<PostPage {...props} />} />
-          
-
-          {/* Put this in the dashboard forward to /dashboard/post/create */}
-          {/* <Route path='/dashboard/*' element={ */}
-              {/* props.user.isAdmin ?  */}
-              {/* <DashboardPage {...props}/> : <Navigate to="/" replace /> */}
-          {/* } /> */}
-
-          {props.user.active && props.user.privilege > 0 &&
-            <Route path='/dashboard/*' element={
-                <DashboardPage {...props}/> 
-            } />
-          }
-
-          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
-  
-          
-        </Routes>
-
-        <Container className='bg-dark py-5'></Container>
-      </Router>
 
     </Container>
   );

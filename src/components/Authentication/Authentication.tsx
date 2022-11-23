@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { Container, Modal, Form, Button, Tabs, Tab } from "react-bootstrap"
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { Props } from "../../App"
+import EmailVerification from "./EmailVerification"
 import Login from "./Login"
 
 
@@ -78,6 +79,12 @@ export const Authentication = (props: Props, _show=false) => {
 
     return (
         <Container>
+            
+            <div>
+                {/* <EmailVerification {...props} /> */}
+            </div>
+
+
             <Modal show={props.showAuth} onHide={handleClose} className='my-auto text-light'>
 
                 {isLoading &&
@@ -112,7 +119,7 @@ export const Authentication = (props: Props, _show=false) => {
                         <Tab eventKey="login" title="Login" className="btn-dark bg-dark">
                             <Modal.Footer>
                             
-                                <Login {...props} handleClose={handleClose}/>
+                                <Login handleClose={handleClose} {...props}/>
                                 
                             </Modal.Footer>
                         </Tab>
@@ -129,7 +136,7 @@ export const Authentication = (props: Props, _show=false) => {
                                         <Form.Label>Username</Form.Label>
                                         <Form.Control type="username" placeholder="Enter Username" value={username} onChange={e => setUsername(e.currentTarget.value)}/>
                                         <Form.Text className="text-muted">
-                                            ssss
+                                            Username
                                         </Form.Text>
                                     </Form.Group>
 

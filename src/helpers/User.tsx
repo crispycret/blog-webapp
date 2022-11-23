@@ -13,12 +13,14 @@ export type User = {
     active: boolean;
     email: string;
     privilege: number;
+    emailVerified: boolean;
 
     register: (username: string, _email: string, password: string) => Promise<AxiosResponse<any, any>>;
     login: (_email: string, password: string) => Promise<AxiosResponse<any, any>>;
     logout: () => Promise<AxiosResponse<any, any>>;
     update: () => Promise<AxiosResponse<any, any>>;
-    validate: () => Promise<AxiosResponse<any, any>>;
+    validateToken: () => Promise<AxiosResponse<any, any>>;
+    emailVerifiedCheck: () => Promise<AxiosResponse<any, any>>;
 
     clear: () => void,
     setCookies: (data: any) => void,
@@ -112,13 +114,17 @@ export const User = (props: API) => {
             email: _email,
             password,
         }
+        console.log('login')
 
-        let res = await props.client.post(`${path}/login`, data)
+        let res
 
-        .catch((error: AxiosError) => {
-            return Promise.reject(error);
-        })
+        try {
+            res = await props.client.post(`/auth/login`, data)
+        } catch (error) {
+            console.log(error)
+        }
 
+        if (!res) return
 
         // Server responded as expected but does not mean the user login was successful.
         if (res.data.status == 200) {
@@ -226,7 +232,7 @@ export const User = (props: API) => {
     * Upon failed validation, clear the users fields, cookies and remove the authentication token from the client's header.
     * @returns 
     */
-    const validate = async () => {
+    const validateToken = async () => {
         
         let res = await props.client.get(`${path}/token/validate`)
         .catch (err => {
@@ -237,9 +243,12 @@ export const User = (props: API) => {
         if (res.data.status == 401) {
             window.location.href = '/'
         }
-
         return res
+    } 
 
+    const emailVerifiedCheck = async () => {
+        let res = await props.client.get(`${path}/user`)
+        return res
     } 
 
 
@@ -253,7 +262,7 @@ export const User = (props: API) => {
         // Implement Authorization expiration time so
         if (props.cookies.Authorization) {
            fromCookies()
-           validate()
+           validateToken()
         } else {
             clear()
         }
@@ -271,7 +280,8 @@ export const User = (props: API) => {
         update,
 
         clear,
-        validate,
+        validateToken,
+        emailVerifiedCheck,
 
         setCookies,
     } as User
