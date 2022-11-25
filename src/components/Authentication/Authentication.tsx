@@ -4,7 +4,9 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { Props } from "../../App"
 import EmailVerification from "./EmailVerification"
 import Login from "./Login"
+import Register from "./Register"
 
+export type AuthPopUpProps = Props & {handleClose: () => void}
 
 
 /*
@@ -14,77 +16,41 @@ import Login from "./Login"
 */
 export const Authentication = (props: Props, _show=false) => {
 
-    const registerForm = useRef<HTMLFormElement>(null)
-
-    const [username, setUsername] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-
+    const defaultSelectedTab = 'login'
+    const [selectedTab, setSelectedTab] = useState(defaultSelectedTab)
     const [isLoading, setIsLoading] = useState(false)
 
-
-    const [showRegisterError, setShowRegisterError] = useState(false)
-    const [registerErrorMsg, setRegisterErrorMsg] = useState("Registration Failed")
-    const registerErrorComponent = <>
-        <div className="alert alert-danger" role="alert">
-            {registerErrorMsg}
-        </div>
-    </>
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [triggerLogin, setTriggerLogin] = useState(false)
 
 
     const handleClose = () => {
         props.setShowAuth(false)
     }
 
-    
-    const handleRegister = () => {
-        // Don't allow submission if passwords do not match
-        props.user.register(username, email, password).then ((res) => {
-            if (res.data.status == 200) {
-                setShowRegisterError(false)
-                handleClose();
-            } else {
-                setShowRegisterError(true)
-                setRegisterErrorMsg(res.data.msg)
-            }
-        })
+    // Upon successful registration activate and forward credentials to the login tab
+    const successfulRegistration = async (_email: string, _password: string) => {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        setSelectedTab('login')
+        setEmail(_email)
+        setPassword(_password)
+        // Wait 1 second before attempting to login
+        setTriggerLogin(true)
     }
 
-    const onSubmit = (e: any) => {
-        e.preventDefault();
-        const selectedForm = e.target.id
-
-        console.log(selectedForm)
-
-
-        // Enable Loading Visual
-        setIsLoading(true)
-        
-
-        if (selectedForm == 'login'){
-            // handleLogin()
-        }
-        else if (selectedForm == 'register') {
-            handleRegister()
-        }
-
-        // Disable Loading Visual
-        setIsLoading(false)
+    const loginProps = {
+        email, password,
+        setEmail, setPassword,
+        login: triggerLogin,
     }
-
 
     useEffect(() => {}, [])
 
 
     return (
         <Container>
-            
-            <div>
-                {/* <EmailVerification {...props} /> */}
-            </div>
-
-
+            <div><EmailVerification {...props} /></div>
             <Modal show={props.showAuth} onHide={handleClose} className='my-auto text-light'>
 
                 {isLoading &&
@@ -113,59 +79,24 @@ export const Authentication = (props: Props, _show=false) => {
 
                 {/* User is not yet authenticated */}
                 {!props.user.active &&
-                    <Tabs id="auth-tabs" defaultActiveKey="login" className="bg-dark" fill>
-
+                    <Tabs id="auth-tabs" defaultActiveKey={defaultSelectedTab} className="bg-dark" fill
+                        activeKey={selectedTab}
+                        onSelect={(k) => setSelectedTab(k || defaultSelectedTab)}
+                    >
                         {/* Display Login Tab */}
                         <Tab eventKey="login" title="Login" className="btn-dark bg-dark">
                             <Modal.Footer>
-                            
-                                <Login handleClose={handleClose} {...props}/>
-                                
+                            <Login handleClose={handleClose} {...loginProps} {...props}/>
+                            {/* <Login handleClose={handleClose} email={email} password={password} {...props}/> */}
                             </Modal.Footer>
                         </Tab>
-
 
                         {/* Display Register Tab */}
                         <Tab eventKey="register" title="Register" className="bg-dark">
                             <Modal.Footer>
-                                <Form id='register' ref={registerForm} style={{width: '100%'}} onSubmit={e => onSubmit(e)}>
-
-                                    {showRegisterError && registerErrorComponent }
-                                    
-                                    <Form.Group className="mb-3" controlId="formBasicUsername">
-                                        <Form.Label>Username</Form.Label>
-                                        <Form.Control type="username" placeholder="Enter Username" value={username} onChange={e => setUsername(e.currentTarget.value)}/>
-                                        <Form.Text className="text-muted">
-                                            Username
-                                        </Form.Text>
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                                        <Form.Label>Email address</Form.Label>
-                                        <Form.Control type="email" placeholder="Enter email" value={email} onChange={e => setEmail(e.currentTarget.value)}/>
-                                        <Form.Text className="text-muted">
-                                            We'll never share your email with anyone else.
-                                        </Form.Text>
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                                        <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" placeholder="Password" value={password} onChange={e => setPassword(e.currentTarget.value)}/>
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                                        <Form.Label>Confirm Password</Form.Label>
-                                        <Form.Control type="password" placeholder="Password" value={confirmPassword} onChange={e => setConfirmPassword(e.currentTarget.value)}/>
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                                        <Form.Check type="checkbox" label="Remember Me" />
-                                    </Form.Group>
-                                    <Button variant="primary" type="submit">Register</Button>
-                                </Form>
+                                <Register handleClose={handleClose} onSuccess={successfulRegistration} {...props}/>
                             </Modal.Footer>
                         </Tab>
- 
                     </Tabs>
 
                 }

@@ -23,6 +23,7 @@ import DashboardPage from './pages/DashboardPage';
 
 import Posts from './helpers/Posts';
 import PostPage from './pages/PostPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 
 
 /*
@@ -68,6 +69,43 @@ function App() {
 
       <Authentication {...props}/>
       <MyNavbar {...props}/>
+
+      <Router>
+        <Routes>
+          
+          {/* <Route path='/' element={<Layout {...props} />} />  */}
+          <Route index element={<HomePage {...props} />} />
+          <Route path='/' element={<HomePage {...props} />} />
+
+          <Route path='/post/:postId' element={<PostPage {...props} />} />
+          
+
+          {/* Put this in the dashboard forward to /dashboard/post/create */}
+          {/* <Route path='/dashboard/*' element={ */}
+              {/* props.user.isAdmin ?  */}
+              {/* <DashboardPage {...props}/> : <Navigate to="/" replace /> */}
+          {/* } /> */}
+
+          {props.user.active && props.user.emailVerified &&
+            <Route path='/dashboard/*' element={
+                <DashboardPage {...props}/> 
+            } />
+          }
+
+          {props.user.active && props.user.emailVerified && props.user.privilege > 0 &&
+            <Route path='/admin/dashboard/*' element={
+                <AdminDashboardPage {...props}/> 
+            } />
+          }
+
+          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+          
+        </Routes>
+
+        <Container className='bg-dark py-5' />
+      </Router>
+
+
 
     </Container>
   );

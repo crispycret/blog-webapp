@@ -15,24 +15,20 @@ export type RouteProps = Props & {
     match?: any
 }
 
-export const DashboardPage = (props: RouteProps) => {
+export const AdminDashboardPage = (props: RouteProps) => {
 
 
 
     useEffect (() => {
-        console.log("Dashboard")
-        
-        // Admin Dashboard would depend on privilege level
-        if (!props.user.emailVerified) {
+        if (props.user.privilege == 0) {
             // window.location.href = '/'
-            return
         }
 
-        if(props.user.emailVerified) {
+        if(props.user.privilege > 0) {
             console.log("UPDATE")
             props.posts.getPosts()
         }
-    }, [props.user.emailVerified])
+    }, [])
 
 
     const element = <>
@@ -52,7 +48,7 @@ export const DashboardPage = (props: RouteProps) => {
 
             <Routes>
 
-                {!props.user.active && !props.user.emailVerified &&
+                {!props.user.active && props.user.privilege == 0 &&
                     <Navigate to='/' replace/>
                 }
                 
@@ -70,4 +66,4 @@ export const DashboardPage = (props: RouteProps) => {
     )
 }
 
-export default DashboardPage;
+export default AdminDashboardPage;
