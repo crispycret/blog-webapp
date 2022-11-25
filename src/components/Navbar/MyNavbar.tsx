@@ -41,17 +41,26 @@ export const MyNavbar = (props: Props) => {
 
                       <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                       <NavDropdown.Item href="/settings">Settings</NavDropdown.Item>
-                      <NavDropdown.Divider />
+
+
+                      {/* Email Verified */}
+                      {props.user.emailVerified &&
+                        <>
+                          <NavDropdown.Divider />
+                          <NavDropdown.Item href='/dashboard'>Dashboard</NavDropdown.Item>
+                          {/* <NavDropdown.Item href='/dashboard/post/create'>New Post</NavDropdown.Item> */}
+                        </>
+                      }
 
                       {/* Admin Authentication */}
                       {props.user.privilege > 0 &&
                         <>
-                          <NavDropdown.Item href='/dashboard'>Dashboard</NavDropdown.Item>
-                          {/* <NavDropdown.Item href='/dashboard/post/create'>New Post</NavDropdown.Item> */}
                           <NavDropdown.Divider />
+                          <NavDropdown.Item href='/admin/dashboard'>Admin Dashboard</NavDropdown.Item>
                         </>
                       }
 
+                      <NavDropdown.Divider />
                       <NavDropdown.Item href="#" onClick={props.user.logout}>Logout</NavDropdown.Item>
                 </NavDropdown>
               }

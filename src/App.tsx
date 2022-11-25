@@ -23,6 +23,7 @@ import DashboardPage from './pages/DashboardPage';
 
 import Posts from './helpers/Posts';
 import PostPage from './pages/PostPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 
 
 /*
@@ -66,7 +67,6 @@ function App() {
   return (
     <Container fluid className="App bg-dark text-light px-0 mx-0 " style={{minHeight:'100vh'}}>
 
-
       <Authentication {...props}/>
       <MyNavbar {...props}/>
 
@@ -86,19 +86,26 @@ function App() {
               {/* <DashboardPage {...props}/> : <Navigate to="/" replace /> */}
           {/* } /> */}
 
-          {props.user.active && props.user.privilege > 0 &&
+          {props.user.active && props.user.emailVerified &&
             <Route path='/dashboard/*' element={
                 <DashboardPage {...props}/> 
             } />
           }
 
+          {props.user.active && props.user.emailVerified && props.user.privilege > 0 &&
+            <Route path='/admin/dashboard/*' element={
+                <AdminDashboardPage {...props}/> 
+            } />
+          }
+
           {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
-  
           
         </Routes>
 
-        <Container className='bg-dark py-5'></Container>
+        <Container className='bg-dark py-5' />
       </Router>
+
+
 
     </Container>
   );
